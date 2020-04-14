@@ -1,14 +1,6 @@
 import React, { Component } from 'react'
 import '../App.css'
-import {
-  Nav,
-  Form,
-  FormControl,
-  Button,
-  Container,
-  Row,
-  Col
-} from 'react-bootstrap'
+import { Nav, Form, Modal, Button, Container, Row, Col } from 'react-bootstrap'
 import Navbar from './Navbar'
 import '../styles/Contentbased.css'
 class Contentbased extends Component {
@@ -18,10 +10,40 @@ class Contentbased extends Component {
       ingredients: [],
       recipes: [],
       selected: [],
-      recipesData:'People who love to eat are always the best people!!'
+      showDetailedRecipe: false,
+      recipesData: 'People who love to eat are always the best people!!'
     }
   }
 
+  showRecipe = () => {
+    console.log('clicked Recipe')
+    this.setState({
+      showDetailedRecipe:true
+    })
+  }
+
+  RecipeDetails = props => {
+    return (
+      <Modal size='lg' aria-labelledby='contained-modal-title-vcenter' centered>
+        <Modal.Header closeButton>
+          <Modal.Title id='contained-modal-title-vcenter'>
+            Modal heading
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>Centered Modal</h4>
+          <p>
+            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
+            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
+            ac consectetur ac, vestibulum at eros.
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          {/* <Button onClick={props.onHide}>Close</Button> */}
+        </Modal.Footer>
+      </Modal>
+    )
+  }
   getRecipe (ingredients) {
     if (ingredients.length === 0) {
       this.setState({
@@ -40,11 +62,14 @@ class Contentbased extends Component {
       })
         .then(res => res.json())
         .then(recipes => {
-          if(recipes.length===0)
-          {
-            this.setState({ recipesData:'Sorry, No recipes available for your selected ingredients' })
+          if (recipes.length === 0) {
+            this.setState({
+              recipesData:
+                'Sorry, No recipes available for your selected ingredients'
+            })
           }
-          this.setState({ recipes })})
+          this.setState({ recipes })
+        })
         .catch(err => {
           console.log(err)
           this.setState({
@@ -96,25 +121,26 @@ class Contentbased extends Component {
   }
 
   render () {
+    console.log(this.state.showDetailedRecipe,"bool")
     return (
       <Container fluid>
         <Row>
           {/* <Navbar/> */}
           <Col sm={3} class='ingredient-container'>
             {/* <div id='ingredient-container'> */}
-              <h4 id='ingredient-heading'>Select your ingredients</h4>
-              <div id='selected-list'>
-                {this.state.selected.map((selected, i) => (
-                  <div class='selected ingredient'>
-                    {selected}
-                    <span
-                      class='floating-button'
-                      onClick={() => this.removefromSelected(i)}
-                    >
-                      &times;
-                    </span>
-                  </div>
-                ))}
+            <h4 id='ingredient-heading'>Select your ingredients</h4>
+            <div id='selected-list'>
+              {this.state.selected.map((selected, i) => (
+                <div class='selected ingredient'>
+                  {selected}
+                  <span
+                    class='floating-button'
+                    onClick={() => this.removefromSelected(i)}
+                  >
+                    &times;
+                  </span>
+                </div>
+              ))}
               {/* </div> */}
               <div id='ingredients-list'>
                 {this.remainingIngredient().map(ingredient => (
@@ -137,16 +163,43 @@ class Contentbased extends Component {
               ingredients:
             </Row>
             {/* <Row className='recipe-container'> */}
-              {(this.state.recipes.length!=0)&&this.state.recipes.map(recipe => (
-                <Row className='recipe'>
+            {this.state.recipes.length != 0 && (this.state.showDetailedRecipe==false) &&
+              this.state.recipes.map(recipe => (
+                <Row className='recipe' onClick={() => this.showRecipe()}>
                   <h3>{recipe.recipe}</h3>
                   <Row className='recipe-detail'>
-                  Ingredients: {recipe.ingredients.join(', ')}
+                    Ingredients: {recipe.ingredients.join(', ')}
                   </Row>
                   {/* <button class="btn btn-primary">How to Make</button> */}
                 </Row>
               ))}
-              {(this.state.recipes.length===0)&&<p className='noDataStyle'>{this.state.recipesData}</p>}
+            {this.state.recipes.length === 0 && (
+              <p className='noDataStyle'>{this.state.recipesData}</p>
+            )}
+            {this.state.showDetailedRecipe == true && (
+              <Modal
+                size='lg'
+                aria-labelledby='contained-modal-title-vcenter'
+                centered
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title id='contained-modal-title-vcenter'>
+                    Modal heading
+                  </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <h4>Centered Modal</h4>
+                  <p>
+                    Cras mattis consectetur purus sit amet fermentum. Cras justo
+                    odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
+                    risus, porta ac consectetur ac, vestibulum at eros.
+                  </p>
+                </Modal.Body>
+                <Modal.Footer>
+                  {/* <Button onClick={props.onHide}>Close</Button> */}
+                </Modal.Footer>
+              </Modal>
+            )}
             {/* </Row> */}
           </Col>
         </Row>
