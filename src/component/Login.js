@@ -14,8 +14,8 @@ class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
   }
-  login = () => {
-    console.log('In register USer')
+  checkLogin = () => {
+    console.log('In login USer')
     let { name, password } = this.state
 
     fetch('http://localhost:1337/login', {
@@ -26,11 +26,12 @@ class Login extends Component {
       body: JSON.stringify({ name, password })
     })
       .then(res => res.json())
-      .then(recipes => {
-        console.log('in res', recipes)
-        // this.setState({
-        //   showLogin: true
-        // })
+      .then(data => {
+        console.log('in res', data)
+        if(data.code===200)
+        this.setState({
+          showHome: true
+        })
       })
       .catch(err => {
         console.log(err)
@@ -76,12 +77,12 @@ class Login extends Component {
               />
             </Form.Group>
 
-            <Button variant='warning' type='submit'>
-              <Link to='/home'>Login</Link>
+            <Button variant='warning' type='submit' onClick={this.checkLogin}>
+              {this.state.showHome && <Link to='/home'>Login</Link>}
             </Button>
 
             <Button variant='info'>
-              <Link to='/register'>Register</Link>
+              {/* <Link to='/register'>Register</Link> */}
             </Button>
           </Form>
         </div>
