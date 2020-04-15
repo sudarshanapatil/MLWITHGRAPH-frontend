@@ -1,5 +1,5 @@
 .rateRecipeTitle{
-  background-color:teal;
+  background-color:#C71585;
   height: 60px;
   color:white;
   font-size: 25px;
@@ -17,16 +17,16 @@
 }
 
 .rateButton{
-  background-color: teal;
+  background-color: #C71585;
 }
 
 .recipeRate{
-  background-color: teal;
+  background-color: #C71585;
   /* flex-direction: column; */
   color:white;
-  margin:20px;
-  width:200px;
-  height:100px
+  margin:10px;
+  width:60%;
+  height:60px
 }
 
 .add-recipe-container{
@@ -36,4 +36,5 @@
   flex-wrap: wrap;
   justify-content: center;
   align-content: center;
+  overflow-y: scroll;
 }

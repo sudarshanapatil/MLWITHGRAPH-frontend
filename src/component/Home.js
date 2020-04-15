@@ -12,34 +12,40 @@ import '../App.css'
 import '../styles/Home.css'
 import Navbar from './Navbar'
 class Home extends Component {
-  constructor () {
+  constructor() {
     super()
     this.state = {
       render: ''
     }
   }
 
-  render () {
+  render() {
     console.log(this.state.render)
     return (
       // <div className='backgroundImage'></div>
       <Container className='homeContainer' fluid>
-        
+
         <Row className='titlebar'>Recipe Recommendation System</Row>
-        <Row>
+        <Row className='navContainer'>
           <Col className='home-button-each'>
-            <Link to='/content'>Find Recipes Based On Ingredients</Link>
-          </Col>
-          <Col className='home-button-each'>
-            <Link to='/collaboration'>
-              Recommended Recipes For You From Us!!
+            <Row className='navchoices'>
+              <Link to='/content'>Find Recipes Based On Ingredients</Link>
+            </Row>
+            <Row className='navchoices'>
+              <Link to='/collaboration'>
+                Recommended Recipes For You From Us!!
             </Link>
+            </Row>
           </Col>
           <Col className='home-button-each'>
-            <Link to='/recipelevel'>Recipes with different Skills</Link>
-          </Col>
-          <Col className='home-button-each'>
-            <Link to='/rateRecipe'>Rate Racipe</Link>
+            <Row className='navchoices'>
+              <Link to='/recipelevel'>Recipes with different Skills</Link>
+
+            </Row>
+            <Row className='navchoices'>
+              <Link to='/rateRecipe'>Rate Racipe</Link>
+            </Row>
+
           </Col>
         </Row>
         <Row className='home-caroulsel'>
@@ -53,7 +59,7 @@ class Home extends Component {
               <Carousel.Caption>
                 <h3>John Gunther</h3>
                 <p>
-                All happiness depends on a leisurely breakfast
+                  All happiness depends on a leisurely breakfast
                 </p>
               </Carousel.Caption>
             </Carousel.Item>
@@ -66,7 +72,7 @@ class Home extends Component {
               <Carousel.Caption>
                 <h3>Paul Prudhomme</h3>
                 <p>
-                You don't need a silver fork to eat good food.
+                  You don't need a silver fork to eat good food.
                 </p>
               </Carousel.Caption>
             </Carousel.Item>

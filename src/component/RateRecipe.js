@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import '../App.css'
-import { Modal, Button ,Container,Row} from 'react-bootstrap'
+import { Modal, Button, Container, Row, Col, FormControl, InputGroup } from 'react-bootstrap'
 import '../styles/RateRecipe.css'
 class RateRecipe extends Component {
-  constructor () {
+  constructor() {
     super()
     this.state = {
       recipes: [],
@@ -12,8 +12,32 @@ class RateRecipe extends Component {
       recipeId: '',
       rating: ''
     }
+    this.handleChange = this.handleChange.bind(this);
   }
 
+
+
+
+  handleChange(event) {
+
+    console.log(event.target.value, "get")
+    let searchText = (event.target.value).toLowerCase()
+    this.setState({ [event.target.name]: event.target.value });
+    if (searchText.length > 3) {
+      let searchedData = this.state.recipes.filter((recipe) => {
+        console.log(recipe.recipeName, searchText, "hii",recipe.recipeName.search(searchText))
+        if (((recipe.recipeName).toLowerCase()).search(searchText)!==-1)
+          return recipe
+      })
+      this.setState({recipes:searchedData})
+      console.log(searchedData, "search data")
+    }
+  }
+  search = (event) => {
+    console.log(event.target.value, "get")
+
+
+  }
   saveRating = (recipeId, rating) => {
     console.log('in save rating ', recipeId)
     fetch('http://localhost:1337/raterecipes', {
@@ -48,8 +72,8 @@ class RateRecipe extends Component {
     console.log('in modal', recipeId)
     this.handleShow(recipeId)
   }
-  
-  componentDidMount () {
+
+  componentDidMount() {
     fetch('http://localhost:1337/getallrecipes')
       .then(res => res.json())
       .then(recipes => {
@@ -67,62 +91,118 @@ class RateRecipe extends Component {
       })
   }
 
-  render () {
+  render() {
     return (
       <Container className='rateRecipeContainer' fluid>
         <Row className='rateRecipeTitle'>
-             Rate Following Recipes And Earn POINTS!!
+          <Col>
+            Rate Following Recipes And Earn POINTS!!
+          </Col>
+          <Col>
+            <InputGroup className="mb-3">
+              <FormControl
+                placeholder="Enter text to search"
+                aria-label="Recipient's username"
+                aria-describedby="basic-addon2"
+                onChange={this.handleChange}
+              />
+            </InputGroup>
+          </Col>
+
+
         </Row>
-      <Row className='add-recipe-container'>
-        {this.state.recipes.map(recipe => (
-          <Button
-            className='recipeRate'
-            onClick={() => this.showModal(recipe.id)}
+
+
+        <Row style={{
+          marginTop: 30,
+          alignContent: 'center',
+          justifyContent: 'center',
+          height: 1000,
+          textAlign: 'center',
+          overflowY: 'scroll'
+        }}>
+          {this.state.recipes.map(recipe => (
+            <div className='recipeRate' onClick={() => this.showModal(recipe.id)}>
+              {recipe.recipeName}
+            </div>
+            // <Button
+            //   className='recipeRate'
+            //   onClick={() => this.showModal(recipe.id)}
+            // >
+            //   {recipe.recipeName}
+            // </Button>
+          ))}
+          <Modal
+            show={this.state.show}
+            onHide={() => this.handleClose()}
+            animation={false}
           >
-            {recipe.recipeName}
-          </Button>
-        ))}
-        <Modal
-          show={this.state.show}
-          onHide={() => this.handleClose()}
-          animation={false}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Rate Recipe:</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Button
-              variant='secondary'
-              onClick={() => this.saveRating(this.state.recipeId, 1)}
-            >
-              1
+            <Modal.Header closeButton>
+              <Modal.Title>Rate Recipe:</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Button
+                variant='secondary'
+                onClick={() => this.saveRating(this.state.recipeId, 1)}
+              >
+                1
             </Button>
-            <Button
-              variant='secondary'
-              onClick={() => this.saveRating(this.state.recipeId, 2)}
-            >
-              2
+              <Button
+                variant='secondary'
+                onClick={() => this.saveRating(this.state.recipeId, 2)}
+              >
+                2
             </Button>
-            <Button
-              variant='secondary'
-              onClick={() => this.saveRating(this.state.recipeId, 3)}
-            >
-              3
+              <Button
+                variant='secondary'
+                onClick={() => this.saveRating(this.state.recipeId, 3)}
+              >
+                3
             </Button>
-            <Button
-              variant='secondary'
-              onClick={() => this.saveRating(this.state.recipeId, 4)}
-            >
-              4
+              <Button
+                variant='secondary'
+                onClick={() => this.saveRating(this.state.recipeId, 4)}
+              >
+                4
             </Button>
-            <Button
-              variant='secondary'
-              onClick={() => this.saveRating(this.state.recipeId, 5)}
-            >
-              5
+              <Button
+                variant='secondary'
+                onClick={() => this.saveRating(this.state.recipeId, 5)}
+              >
+                5
             </Button>
-          </Modal.Body>
-          {/* <Modal.Footer>
+              <Button
+                variant='secondary'
+                onClick={() => this.saveRating(this.state.recipeId, 6)}
+              >
+                6
+            </Button>
+              <Button
+                variant='secondary'
+                onClick={() => this.saveRating(this.state.recipeId, 7)}
+              >
+                7
+            </Button>
+              <Button
+                variant='secondary'
+                onClick={() => this.saveRating(this.state.recipeId, 8)}
+              >
+                8
+            </Button>
+              <Button
+                variant='secondary'
+                onClick={() => this.saveRating(this.state.recipeId, 9)}
+              >
+                9
+            </Button>
+              <Button
+                variant='secondary'
+                onClick={() => this.saveRating(this.state.recipeId, 10)}
+              >
+                10
+            </Button>
+            </Modal.Body>
+            {/* <Modal.Footer>
             <Button variant='secondary' onClick={() => this.handleClose()}>
               Close
             </Button>
@@ -130,9 +210,9 @@ class RateRecipe extends Component {
               Save Changes
             </Button>
           </Modal.Footer> */}
-        </Modal>
-      </Row>
-      </Container>
+          </Modal>
+        </Row>
+      </Container >
     )
   }
 }
