@@ -3,6 +3,8 @@ import '../App.css'
 import { Modal, Button, Container, Row, Col, FormControl, InputGroup } from 'react-bootstrap'
 import '../styles/RateRecipe.css'
 import Navbar from './Navbar'
+const baseUrl = 'http://localhost:1337/'
+const ratingParameter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 class RateRecipe extends Component {
   constructor() {
     super()
@@ -16,21 +18,17 @@ class RateRecipe extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-
-
-
   handleChange(event) {
-
     console.log(event.target.value, "get")
     let searchText = (event.target.value).toLowerCase()
     this.setState({ [event.target.name]: event.target.value });
     if (searchText.length > 3) {
       let searchedData = this.state.recipes.filter((recipe) => {
-        console.log(recipe.recipeName, searchText, "hii",recipe.recipeName.search(searchText))
-        if (((recipe.recipeName).toLowerCase()).search(searchText)!==-1)
+        console.log(recipe.recipeName, searchText, "hii", recipe.recipeName.search(searchText))
+        if (((recipe.recipeName).toLowerCase()).search(searchText) !== -1)
           return recipe
       })
-      this.setState({recipes:searchedData})
+      this.setState({ recipes: searchedData })
       console.log(searchedData, "search data")
     }
   }
@@ -41,7 +39,7 @@ class RateRecipe extends Component {
   }
   saveRating = (recipeId, rating) => {
     console.log('in save rating ', recipeId)
-    fetch('http://localhost:1337/raterecipes', {
+    fetch(`${baseUrl}raterecipes`, {
       method: 'POST', // or 'PUT'
       headers: {
         'Content-Type': 'application/json'
@@ -75,7 +73,7 @@ class RateRecipe extends Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:1337/getallrecipes')
+    fetch(`${baseUrl}getallrecipes`)
       .then(res => res.json())
       .then(recipes => {
         let recipesData = recipes.map(key => {
@@ -95,7 +93,7 @@ class RateRecipe extends Component {
   render() {
     return (
       <Container className='rateRecipeContainer' fluid>
-        <Navbar/>
+        <Navbar />
         <Row className='rateRecipeTitle'>
           <Col>
             Rate Following Recipes And Earn POINTS!!
@@ -143,66 +141,15 @@ class RateRecipe extends Component {
               <Modal.Title>Rate Recipe:</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Button
-                variant='secondary'
-                onClick={() => this.saveRating(this.state.recipeId, 1)}
-              >
-                1
-            </Button>
-              <Button
-                variant='secondary'
-                onClick={() => this.saveRating(this.state.recipeId, 2)}
-              >
-                2
-            </Button>
-              <Button
-                variant='secondary'
-                onClick={() => this.saveRating(this.state.recipeId, 3)}
-              >
-                3
-            </Button>
-              <Button
-                variant='secondary'
-                onClick={() => this.saveRating(this.state.recipeId, 4)}
-              >
-                4
-            </Button>
-              <Button
-                variant='secondary'
-                onClick={() => this.saveRating(this.state.recipeId, 5)}
-              >
-                5
-            </Button>
-              <Button
-                variant='secondary'
-                onClick={() => this.saveRating(this.state.recipeId, 6)}
-              >
-                6
-            </Button>
-              <Button
-                variant='secondary'
-                onClick={() => this.saveRating(this.state.recipeId, 7)}
-              >
-                7
-            </Button>
-              <Button
-                variant='secondary'
-                onClick={() => this.saveRating(this.state.recipeId, 8)}
-              >
-                8
-            </Button>
-              <Button
-                variant='secondary'
-                onClick={() => this.saveRating(this.state.recipeId, 9)}
-              >
-                9
-            </Button>
-              <Button
-                variant='secondary'
-                onClick={() => this.saveRating(this.state.recipeId, 10)}
-              >
-                10
-            </Button>
+              {ratingParameter.map((rating, key) => {
+                rating = rating + 1
+                return <Button
+                  variant='secondary'
+                  onClick={() => this.saveRating(this.state.recipeId, rating)}
+                >
+                  {rating}
+                </Button>
+              })}
             </Modal.Body>
             {/* <Modal.Footer>
             <Button variant='secondary' onClick={() => this.handleClose()}>

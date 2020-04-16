@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Container,Row,Col } from 'react-bootstrap'
 import '../styles/RecipeLevel.css'
+import Navbar from './Navbar'
 class RecipesWithSkill extends Component {
   constructor () {
     super()
@@ -35,6 +36,7 @@ class RecipesWithSkill extends Component {
   render () {
     return (
       <Container className='recipeLevelContainer' fluid> 
+      <Navbar/>
         <Row className='recipeLevelTitle'>
          Check Your Time And Prepare Recipes
         </Row>

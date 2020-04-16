@@ -11,42 +11,92 @@ import { Link } from 'react-router-dom'
 import '../App.css'
 import '../styles/Home.css'
 import Navbar from './Navbar'
+const carouselData = [
+  {
+    image: require('../images/carousel2.jpg'),
+    auther: 'Paul Prudhomme',
+    caption: `You don't need a silver fork to eat good food.`,
+    alt: 'enjoy food'
+  },
+  {
+    image: require('../images/carousel3.jpg'),
+    auther: 'John Gunther',
+    caption: ' All happiness depends on a leisurely breakfast',
+    alt: ''
+  },
+  {
+    image: require('../images/indianchat.jpg'),
+    auther: 'Barbara Johnson',
+    caption: 'A balanced diet is a cookie in each hand.',
+    alt: ''
+  }
+]
 class Home extends Component {
   constructor() {
     super()
     this.state = {
-      render: ''
+      render: '',
+      apiData: false,
+      recipes: [],
+      searchedData: [],
+      showCarousel: true,
+      searchText: '',
+      searchCount: 0
     }
   }
+  handleChange = (event) => {
+    console.log(event.target.value, "get")
+    let searchText = (event.target.value).toLowerCase()
+    // this.setState({ [event.target.name]: event.target.value });
+    if (searchText.length === 0 || searchText === '') {
+      this.setState({ showCarousel: true, searchText })
+    }
+    if (searchText.length > 3 && !this.state.apiData) {
+      console.log('calling API', this.state.apiData)
+      fetch('http://localhost:1337/getallrecipes')
+        .then(res => res.json())
+        .then(recipes => {
+          console.log(recipes.length, "apidata length")
+          this.setState({
+            apiData: true,
+            recipes,
+            showCarousel: false,
+            searchText
+          })
+        })
+        .catch(err => {
+          console.log(err)
+          this.setState({
+            recipes: []
+          })
+        })
 
+
+    }
+    if (this.state.apiData && searchText !== '') {
+      let searchedData = this.state.recipes.filter((recipe) => {
+        if (((recipe.recipeName).toLowerCase()).search(searchText) !== -1)
+          return recipe
+      })
+      this.setState({
+        searchedData,
+        showCarousel: false,
+        searchText,
+        count: searchedData.length
+      })
+      console.log(searchedData.length, "search data", searchedData[0], searchText)
+
+    }
+
+  }
   render() {
-    console.log(this.state.render)
     return (
       // <div className='backgroundImage'></div>
       <Container className='homeContainer' fluid>
-<Navbar />
-        {/* <Row className='titlebar'>
+        <Navbar />
+        <Row className='searchContainer'>
+          <Col></Col>
           <Col>
-          Recipe Recommendation System
-          </Col>
-          <Col>
-          <Link to='/content'>Based On Ingredients</Link>
-          </Col>
-          <Col>
-          <Link to='/collaboration'>Recommendation from US</Link>
-          </Col>
-          <Col>
-          <Link to='/rateRecipe'>Rate Recipes</Link>
-          </Col>
-          <Col>
-          <Link to='/recipelevel'>Categorized</Link>
-          </Col>
-         
-         
-          </Row> */}
-          <Row className='searchContainer'>
-            <Col></Col>
-            <Col>
             <InputGroup className="findRecipe">
               <FormControl
                 placeholder="Recipe name..."
@@ -55,78 +105,49 @@ class Home extends Component {
                 onChange={this.handleChange}
               />
             </InputGroup>
-            </Col>
-            <Col className='findRecipeText'>
+          </Col>
+          <Col className='findRecipeText'>
             search Recipes
             </Col>
-            <Col>
-            </Col>
-          
-          </Row>
-        {/* <Row className='navContainer'>
-          <Col className='home-button-each'>
-            <Row className='navchoices'>
-              <Link to='/content'>Find Recipes Based On Ingredients</Link>
-            </Row>
-            <Row className='navchoices'>
-              <Link to='/collaboration'>
-                Recommended Recipes For You From Us!!
-            </Link>
-            </Row>
+          <Col>
           </Col>
-          <Col className='home-button-each'>
-            <Row className='navchoices'>
-              <Link to='/recipelevel'>Recipes with different Skills</Link>
-
-            </Row>
-            <Row className='navchoices'>
-              <Link to='/rateRecipe'>Rate Racipe</Link>
-            </Row>
-
-          </Col>
-        </Row> */}
-        <Row className='home-caroulsel'>
-          <Carousel>
-            <Carousel.Item>
-              <img
-                className='img-carousel'
-                src={require('../images/carousel3.jpg')}
-                alt='First slide'
-              />
-              <Carousel.Caption>
-                <h3>John Gunther</h3>
-                <p>
-                  All happiness depends on a leisurely breakfast
-                </p>
-              </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-              <img
-                className='img-carousel'
-                src={require('../images/carousel2.jpg')}
-                alt='First slide'
-              />
-              <Carousel.Caption>
-                <h3>Paul Prudhomme</h3>
-                <p>
-                  You don't need a silver fork to eat good food.
-                </p>
-              </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-              <img
-                className='img-carousel'
-                src={require('../images/indianchat.jpg')}
-                alt='Third slide'
-              />
-              <Carousel.Caption>
-                <h3>Barbara Johnson</h3>
-                <p>A balanced diet is a cookie in each hand.</p>
-              </Carousel.Caption>
-            </Carousel.Item>
-          </Carousel>
-          {this.state.render}
         </Row>
+        {this.state.showCarousel && <Row className='home-caroulsel'>
+          <Carousel>
+            {carouselData.map((data, index) => {
+              return <Carousel.Item>
+                <img
+                  className='img-carousel'
+                  src={data.image}
+                  alt={data.alt}
+                />
+                <Carousel.Caption>
+                  <h3>{data.auther}</h3>
+                  <p>
+                    {data.caption}
+                  </p>
+                </Carousel.Caption>
+              </Carousel.Item>
+            })}
+          </Carousel>
+        </Row>}
+
+
+        {!this.state.showCarousel &&
+          <Row className='searchedData'>
+            <Row className='searchedRecipe'>
+              {this.state.searchText} Recipes {this.state.searchCount}
+            </Row>
+
+            {this.state.searchedData.map((recipe, key) => {
+              return (
+                <Row className='searchedRecipe' key={key}>
+                  {recipe.recipeName}
+                </Row>
+              )
+            })}
+          </Row>
+        }
       </Container>
     )
   }

@@ -19,7 +19,7 @@ class Collaborative extends Component {
   }
 
   componentDidMount () {
-    fetch('http://localhost:1337/getuserrecommendation', {
+    fetch(`${baseUrl}getuserrecommendation`, {
       method: 'post',
       headers: {
         Accept: 'application/json',
@@ -48,7 +48,7 @@ class Collaborative extends Component {
         recipes: []
       })
     } else {
-      fetch('http://localhost:1337/getrecipes', {
+      fetch(`${baseUrl}getrecipes`, {
         method: 'post',
         headers: {
           Accept: 'application/json',
@@ -107,7 +107,7 @@ class Collaborative extends Component {
   }
 
   getRecom (userName, similarUser) {
-    fetch('http://localhost:1337/getuserrecommendation', {
+    fetch(`${baseUrl}getuserrecommendation`, {
       method: 'post',
       headers: {
         Accept: 'application/json',

@@ -10,6 +10,9 @@ function Navbar() {
           Recipe Recommendation System
           </Col>
         <Col>
+          <Link to='/home'>Home</Link>
+        </Col>
+        <Col>
           <Link to='/content'>Based On Ingredients</Link>
         </Col>
         <Col>
