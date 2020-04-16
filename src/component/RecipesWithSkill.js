@@ -38,10 +38,18 @@ class RecipesWithSkill extends Component {
         <Row className='recipeLevelTitle'>
          Check Your Time And Prepare Recipes
         </Row>
-        <Row id='recomm-recipes-list'>
+        <Row className='skillLevelList'>
+          <Col>
           {(this.state.recomRecipes.length!=0)&&this.state.recomRecipes.map(recipe => {
-            return <div className='recomm-recipe-each'>{recipe.name}</div>
+            return <div className='recomm-recipe-skill'>{recipe.name}</div>
           })}
+          </Col>
+          <Col>
+          {(this.state.recomRecipes.length!=0)&&this.state.recomRecipes.map(recipe => {
+            return <div className='recomm-recipe-skill'>{recipe.name}</div>
+          })} 
+          </Col>
+         
         </Row>
         {/* <Row> */}
           {/* <Col>Easy to prepare

@@ -1,24 +1,36 @@
 import React, { Component } from 'react'
 import '../App.css'
-import { Nav, Form, Modal, Button, Container, Row, Col } from 'react-bootstrap'
+import { Nav, Image, Modal, Button, Container, Row, Col } from 'react-bootstrap'
 import Navbar from './Navbar'
 import '../styles/Contentbased.css'
+let steps = [
+  'Take a pan and add butter in it',
+  'After the butter is melted add All purpose flour and roast it till it is pinkish coloured',
+  'Now add warm milk',
+  'Now quickly mix it well so that pieces are not created',
+  'Now add sugar,salt and black pepper',
+  'Mix it well',
+  'Now add fresh cream and 1cup cheese in it. Mix it well',
+  'Now white sauce is ready add pasta in it. Mix it well'
+]
 class Contentbased extends Component {
-  constructor () {
+  constructor() {
     super()
     this.state = {
       ingredients: [],
       recipes: [],
       selected: [],
+      detailRecipe: '',
       showDetailedRecipe: false,
       recipesData: 'People who love to eat are always the best people!!'
     }
   }
 
-  showRecipe = () => {
-    console.log('clicked Recipe')
+  showRecipe = (recipe) => {
+    console.log('clicked Recipe', recipe)
     this.setState({
-      showDetailedRecipe:true
+      showDetailedRecipe: true,
+      detailRecipe: recipe
     })
   }
 
@@ -44,7 +56,12 @@ class Contentbased extends Component {
       </Modal>
     )
   }
-  getRecipe (ingredients) {
+  closeDetails = () => {
+    this.setState({
+      showDetailedRecipe: false
+    })
+  }
+  getRecipe(ingredients) {
     if (ingredients.length === 0) {
       this.setState({
         recipes: []
@@ -79,7 +96,7 @@ class Contentbased extends Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     fetch('http://localhost:1337/getallingredients')
       .then(res => res.json())
       .then(ingredients => this.setState({ ingredients }))
@@ -91,7 +108,7 @@ class Contentbased extends Component {
       })
   }
 
-  moveToSelected (ingredient) {
+  moveToSelected(ingredient) {
     let selected = [...this.state.selected, ingredient].sort()
     this.getRecipe(selected)
     this.setState({
@@ -99,7 +116,7 @@ class Contentbased extends Component {
     })
   }
 
-  removefromSelected (i) {
+  removefromSelected(i) {
     let selected = this.state.selected
     selected.splice(i, 1)
     this.getRecipe(selected)
@@ -108,7 +125,7 @@ class Contentbased extends Component {
     })
   }
 
-  remainingIngredient () {
+  remainingIngredient() {
     const { selected, ingredients } = this.state
     let i = 0
     return ingredients.filter(ingredient => {
@@ -120,10 +137,11 @@ class Contentbased extends Component {
     })
   }
 
-  render () {
-    console.log(this.state.showDetailedRecipe,"bool")
+  render() {
+    console.log(this.state.showDetailedRecipe, "bool")
     return (
       <Container fluid>
+        <Navbar/>
         <Row>
           {/* <Navbar/> */}
           <Col sm={3} class='ingredient-container'>
@@ -163,10 +181,13 @@ class Contentbased extends Component {
               ingredients:
             </Row>
             {/* <Row className='recipe-container'> */}
-            {this.state.recipes.length != 0 && (this.state.showDetailedRecipe==false) &&
+            {this.state.recipes.length != 0 && (this.state.showDetailedRecipe === false) &&
               this.state.recipes.map(recipe => (
-                <Row className='recipe' onClick={() => this.showRecipe()}>
-                  <h3>{recipe.recipe}</h3>
+                <Row className='recipe' onClick={() => this.showRecipe(recipe)}>
+                  <Row>
+                    <h4>{recipe.recipe}</h4>
+
+                  </Row>
                   <Row className='recipe-detail'>
                     Ingredients: {recipe.ingredients.join(', ')}
                   </Row>
@@ -176,29 +197,32 @@ class Contentbased extends Component {
             {this.state.recipes.length === 0 && (
               <p className='noDataStyle'>{this.state.recipesData}</p>
             )}
-            {this.state.showDetailedRecipe == true && (
-              <Modal
-                size='lg'
-                aria-labelledby='contained-modal-title-vcenter'
-                centered
-              >
-                <Modal.Header closeButton>
-                  <Modal.Title id='contained-modal-title-vcenter'>
-                    Modal heading
-                  </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <h4>Centered Modal</h4>
-                  <p>
-                    Cras mattis consectetur purus sit amet fermentum. Cras justo
-                    odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                    risus, porta ac consectetur ac, vestibulum at eros.
-                  </p>
-                </Modal.Body>
-                <Modal.Footer>
-                  {/* <Button onClick={props.onHide}>Close</Button> */}
-                </Modal.Footer>
-              </Modal>
+            {this.state.showDetailedRecipe === true && (
+              <div className='detailedView'>
+                <Row className='detailedRecipeTitle'>
+                  {this.state.detailRecipe.recipe}
+                </Row>
+                <Row>
+                  <Image src={require('../images/recipe3.jpg')}></Image>
+                </Row>
+                <Row className='detailedRecipeIngred'>
+                  ingredients: {this.state.detailRecipe.ingredients.join(', ')}
+                </Row>
+                <Row>
+                  Steps
+                </Row>
+                {steps.map((step, count) => {
+                  return (<Row className='recipeStep'>
+                   {`${count+1}}`}  {step}
+                  </Row>)
+                })}
+                <Row>
+                  <Button onClick={() => this.closeDetails()}>Close</Button>
+                </Row>
+
+
+              </div>
+
             )}
             {/* </Row> */}
           </Col>

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import '../App.css'
 import { Modal, Button, Container, Row, Col, FormControl, InputGroup } from 'react-bootstrap'
 import '../styles/RateRecipe.css'
+import Navbar from './Navbar'
 class RateRecipe extends Component {
   constructor() {
     super()
@@ -94,6 +95,7 @@ class RateRecipe extends Component {
   render() {
     return (
       <Container className='rateRecipeContainer' fluid>
+        <Navbar/>
         <Row className='rateRecipeTitle'>
           <Col>
             Rate Following Recipes And Earn POINTS!!

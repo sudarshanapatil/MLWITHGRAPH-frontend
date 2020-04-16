@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import '../App.css'
 import '../styles/Collaborative.css'
 import { Container,Row } from 'react-bootstrap'
+import Navbar from './Navbar'
 const baseUrl = 'http://localhost:1337/'
+
 class Collaborative extends Component {
   constructor () {
     super()
@@ -131,6 +133,7 @@ class Collaborative extends Component {
   render () {
     return (
       <Container className='collaborativeContainer' fluid>
+        <Navbar/>
         <Row className='sectionTitle'>Recommended Recipes For You Based On Your Simillar Users!</Row>
         <Row id='recomm-recipes-list'>
           {this.state.recomRecipes.map(recipe => {

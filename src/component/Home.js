@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {
-  Button,
-  ButtonToolbar,
+  FormControl,
+  InputGroup,
   Carousel,
   Container,
   Row,
@@ -24,9 +24,46 @@ class Home extends Component {
     return (
       // <div className='backgroundImage'></div>
       <Container className='homeContainer' fluid>
-
-        <Row className='titlebar'>Recipe Recommendation System</Row>
-        <Row className='navContainer'>
+<Navbar />
+        {/* <Row className='titlebar'>
+          <Col>
+          Recipe Recommendation System
+          </Col>
+          <Col>
+          <Link to='/content'>Based On Ingredients</Link>
+          </Col>
+          <Col>
+          <Link to='/collaboration'>Recommendation from US</Link>
+          </Col>
+          <Col>
+          <Link to='/rateRecipe'>Rate Recipes</Link>
+          </Col>
+          <Col>
+          <Link to='/recipelevel'>Categorized</Link>
+          </Col>
+         
+         
+          </Row> */}
+          <Row className='searchContainer'>
+            <Col></Col>
+            <Col>
+            <InputGroup className="findRecipe">
+              <FormControl
+                placeholder="Recipe name..."
+                aria-label="Recipient's username"
+                aria-describedby="basic-addon2"
+                onChange={this.handleChange}
+              />
+            </InputGroup>
+            </Col>
+            <Col className='findRecipeText'>
+            search Recipes
+            </Col>
+            <Col>
+            </Col>
+          
+          </Row>
+        {/* <Row className='navContainer'>
           <Col className='home-button-each'>
             <Row className='navchoices'>
               <Link to='/content'>Find Recipes Based On Ingredients</Link>
@@ -47,7 +84,7 @@ class Home extends Component {
             </Row>
 
           </Col>
-        </Row>
+        </Row> */}
         <Row className='home-caroulsel'>
           <Carousel>
             <Carousel.Item>

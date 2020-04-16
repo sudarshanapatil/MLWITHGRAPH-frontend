@@ -1,7 +1,7 @@
 .rateRecipeTitle{
-  background-color:#C71585;
+  background-color:snow;
   height: 60px;
-  color:white;
+  color:red;
   font-size: 25px;
   font-style: normal;
   text-align: center;
@@ -12,21 +12,40 @@
 }
 
 .rateRecipeContainer{
-  background-image: url("../images/food.jpg");
+  /* background-image: url("../images/food.jpg"); */
   flex-direction: column;
 }
 
+.detailedRecipeIngred{
+
+}
+
 .rateButton{
-  background-color: #C71585;
+  background-color: #CD5C5C;
 }
 
 .recipeRate{
-  background-color: #C71585;
+  background-color: #CD5C5C;
   /* flex-direction: column; */
   color:white;
   margin:10px;
   width:60%;
-  height:60px
+  height:60px;
+  padding:15px;
+  border-radius: 5px;
+}
+.recomm-recipe-skill{
+  width: 700;
+  height:90px;
+  align-items: center;
+  justify-content: center;
+  background-color:beige;
+  border-radius: 8px;
+  color:black;
+  font-size: 20px;
+  margin: 5px;
+  padding: 10px;
+  text-align: center;
 }
 
 .add-recipe-container{
