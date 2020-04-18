@@ -5,12 +5,22 @@ import {
   Carousel,
   Container,
   Row,
-  Col
+  Col,Image,Button
 } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import '../App.css'
 import '../styles/Home.css'
 import Navbar from './Navbar'
+let steps = [
+  'Take a pan and add butter in it',
+  'After the butter is melted add All purpose flour and roast it till it is pinkish coloured',
+  'Now add warm milk',
+  'Now quickly mix it well so that pieces are not created',
+  'Now add sugar,salt and black pepper',
+  'Mix it well',
+  'Now add fresh cream and 1cup cheese in it. Mix it well',
+  'Now white sauce is ready add pasta in it. Mix it well'
+]
 const carouselData = [
   {
     image: require('../images/carousel2.jpg'),
@@ -41,7 +51,9 @@ class Home extends Component {
       searchedData: [],
       showCarousel: true,
       searchText: '',
-      searchCount: 0
+      searchCount: 0,
+      detailRecipe: '',
+      showDetailedRecipe: false,
     }
   }
   handleChange = (event) => {
@@ -57,11 +69,15 @@ class Home extends Component {
         .then(res => res.json())
         .then(recipes => {
           console.log(recipes.length, "apidata length")
+          let searchedData=this.searchData(recipes,searchText)
           this.setState({
             apiData: true,
             recipes,
             showCarousel: false,
-            searchText
+            searchText,
+            searchCount:searchedData.length,
+            searchedData,
+            
           })
         })
         .catch(err => {
@@ -73,23 +89,44 @@ class Home extends Component {
 
 
     }
-    if (this.state.apiData && searchText !== '') {
-      let searchedData = this.state.recipes.filter((recipe) => {
-        if (((recipe.recipeName).toLowerCase()).search(searchText) !== -1)
-          return recipe
-      })
-      this.setState({
-        searchedData,
-        showCarousel: false,
-        searchText,
-        count: searchedData.length
-      })
-      console.log(searchedData.length, "search data", searchedData[0], searchText)
-
+    if (this.state.apiData && searchText !== '' && searchText.length > 3) {
+      let searchedData=this.searchData(this.state.recipes,searchText)
+      let searchCount=searchedData.length
+      this.setState({searchCount,searchText,searchedData,showCarousel:false,})
     }
 
   }
+
+  searchData=(recipes,searchText)=>{
+    console.log("in search data fun")
+    let searchedData = recipes.filter((recipe) => {
+      if (((recipe.recipeName).toLowerCase()).search(searchText) !== -1)
+        return recipe
+    })
+    console.log(searchedData.length, "search data", searchedData[0], searchText)
+    return searchedData;
+    // this.setState({
+    //   searchedData,
+    //   showCarousel: false,
+    //   searchText,
+    //   count: searchedData.length
+    // })
+    
+  }
+  showRecipe = (recipe) => {
+    console.log('clicked Recipe', recipe)
+    this.setState({
+      showDetailedRecipe: true,
+      detailRecipe: recipe
+    })
+  }
+  closeDetails = () => {
+    this.setState({
+      showDetailedRecipe: false
+    })
+  }
   render() {
+    console.log(this.state.detailRecipe,"detail");
     return (
       // <div className='backgroundImage'></div>
       <Container className='homeContainer' fluid>
@@ -107,7 +144,7 @@ class Home extends Component {
             </InputGroup>
           </Col>
           <Col className='findRecipeText'>
-            search Recipes
+            Search Recipes
             </Col>
           <Col>
           </Col>
@@ -133,21 +170,50 @@ class Home extends Component {
         </Row>}
 
 
-        {!this.state.showCarousel &&
+        {!this.state.showCarousel && !this.state.showDetailedRecipe &&
           <Row className='searchedData'>
-            <Row className='searchedRecipe'>
-              {this.state.searchText} Recipes {this.state.searchCount}
+            <Row className='searchTitle'>
+              {`${this.state.searchText} Recipes ${this.state.searchCount}`}
             </Row>
 
             {this.state.searchedData.map((recipe, key) => {
               return (
-                <Row className='searchedRecipe' key={key}>
+                <Row className='searchedRecipe' key={key} onClick={()=>this.showRecipe(recipe)}>
                   {recipe.recipeName}
                 </Row>
               )
             })}
           </Row>
         }
+         {
+          
+         this.state.showDetailedRecipe && (
+              <div className='detailedView'>
+                <Row className='detailedRecipeTitle'>
+                  {this.state.detailRecipe.recipeName}
+                </Row>
+                <Row>
+                  <Image src={require('../images/recipe1.jpg')}></Image>
+                </Row>
+                <Row className='detailedRecipeIngred'>
+                  ingredients: {this.state.detailRecipe.ingredients.join(', ')}
+                </Row>
+                <Row>
+                  Steps
+                </Row>
+                {steps.map((step, count) => {
+                  return (<Row className='recipeStep'>
+                   {`${count+1}}`}  {step}
+                  </Row>)
+                })}
+                <Row>
+                  <Button onClick={() => this.closeDetails()}>Close</Button>
+                </Row>
+
+
+              </div>
+
+            )}
       </Container>
     )
   }

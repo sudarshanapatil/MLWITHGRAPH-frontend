@@ -6,25 +6,27 @@ class RecipesWithSkill extends Component {
   constructor () {
     super()
     this.state={
-      recomRecipes:[]
+      recomRecipes:[],
+      easyRecipes:[],
+      difficultRecipes:[]
     }
   }
 
   componentDidMount(){
     fetch('http://localhost:1337/getrecipelevel', {
-      method: 'get',
+      method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
-      // body: JSON.stringify({
-      //   userName: 'Spruha'
-      // })
+      body: JSON.stringify({
+        skillLevel: 'Easy'
+      })
     })
       .then(res => res.json())
       .then(recomRecipes => {
         console.log(recomRecipes, 'recipeData')
-        this.setState({ recomRecipes })
+        this.setState({ easyRecipes:recomRecipes })
       })
       .catch(err => {
         console.log(err)
@@ -32,6 +34,27 @@ class RecipesWithSkill extends Component {
           recomRecipes: []
         })
       })
+    //   fetch('http://localhost:1337/getrecipelevel', {
+    //   method: 'post',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   // body: JSON.stringify({
+    //   //   userName: 'Spruha'
+    //   // })
+    // })
+    //   .then(res => res.json())
+    //   .then(recomRecipes => {
+    //     console.log(recomRecipes, 'recipeData')
+    //     this.setState({ recomRecipes })
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //     this.setState({
+    //       recomRecipes: []
+    //     })
+    //   })
   }
   render () {
     return (
@@ -42,8 +65,11 @@ class RecipesWithSkill extends Component {
         </Row>
         <Row className='skillLevelList'>
           <Col>
-          {(this.state.recomRecipes.length!=0)&&this.state.recomRecipes.map(recipe => {
-            return <div className='recomm-recipe-skill'>{recipe.name}</div>
+          {(this.state.easyRecipes.length!=0)&&this.state.easyRecipes.map(recipe => {
+            return <div className='recomm-recipe-skill'>{recipe.name}
+            <br/>
+            {recipe.cookingTime}
+            </div>
           })}
           </Col>
           <Col>

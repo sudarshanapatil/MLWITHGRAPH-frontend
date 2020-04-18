@@ -121,7 +121,7 @@ class Contentbased extends Component {
     return (
       <Container fluid>
         <Navbar/>
-        <Row>
+        <Row className='contentbasedCotainer'>
           <Col sm={3} >
             <h4 id='ingredient-heading'>Select your ingredients</h4>
             <div id='selected-list'>

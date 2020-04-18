@@ -13,24 +13,47 @@ class RateRecipe extends Component {
       setShow: false,
       show: false,
       recipeId: '',
-      rating: ''
+      rating: '',
+       searchText: '',
+      searchCount: 0,
+      detailRecipe: '',
+      showDetailedRecipe: false,
     }
-    this.handleChange = this.handleChange.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(event) {
+  handleChange = (event) => {
     console.log(event.target.value, "get")
     let searchText = (event.target.value).toLowerCase()
-    this.setState({ [event.target.name]: event.target.value });
-    if (searchText.length > 3) {
-      let searchedData = this.state.recipes.filter((recipe) => {
-        console.log(recipe.recipeName, searchText, "hii", recipe.recipeName.search(searchText))
-        if (((recipe.recipeName).toLowerCase()).search(searchText) !== -1)
-          return recipe
-      })
-      this.setState({ recipes: searchedData })
-      console.log(searchedData, "search data")
+    if (searchText.length === 0 || searchText === '') {
+      this.setState({ recipes:this.state.apiData })
     }
+    if (searchText.length > 3) {
+      console.log('calling API')
+      let searchedData=this.searchData(this.state.apiData,searchText)
+      this.setState({       
+        recipes:searchedData,
+        searchText,
+        searchCount:searchedData.length,               
+      })
+    }
+    // if (this.state.apiData && searchText !== '' && searchText.length > 3) {
+    //   let searchedData=this.searchData(this.state.recipes,searchText)
+    //   let searchCount=searchedData.length
+    //   this.setState({searchCount,searchText,recipes:searchedData,showCarousel:false,})
+    // }
+
+  }
+
+  searchData=(recipes,searchText)=>{
+    console.log("in search data fun")
+    let searchedData = recipes.filter((recipe) => {
+      if (((recipe.recipeName).toLowerCase()).search(searchText) !== -1)
+        return recipe
+    })
+    console.log(searchedData.length, "search data", searchedData[0], searchText)
+    return searchedData;
+    
   }
   search = (event) => {
     console.log(event.target.value, "get")
@@ -80,7 +103,7 @@ class RateRecipe extends Component {
           return key.recipeName
         })
         console.log(recipes, 'API data')
-        this.setState({ recipes })
+        this.setState({ recipes,apiData:recipes })
       })
       .catch(err => {
         console.log(err)
@@ -108,11 +131,7 @@ class RateRecipe extends Component {
               />
             </InputGroup>
           </Col>
-
-
         </Row>
-
-
         <Row style={{
           marginTop: 30,
           alignContent: 'center',
@@ -125,12 +144,7 @@ class RateRecipe extends Component {
             <div className='recipeRate' onClick={() => this.showModal(recipe.id)}>
               {recipe.recipeName}
             </div>
-            // <Button
-            //   className='recipeRate'
-            //   onClick={() => this.showModal(recipe.id)}
-            // >
-            //   {recipe.recipeName}
-            // </Button>
+           
           ))}
           <Modal
             show={this.state.show}
@@ -151,14 +165,7 @@ class RateRecipe extends Component {
                 </Button>
               })}
             </Modal.Body>
-            {/* <Modal.Footer>
-            <Button variant='secondary' onClick={() => this.handleClose()}>
-              Close
-            </Button>
-            <Button variant='primary' onClick={() => this.saveRating(this.state.recipeId)}>
-              Save Changes
-            </Button>
-          </Modal.Footer> */}
+          
           </Modal>
         </Row>
       </Container >

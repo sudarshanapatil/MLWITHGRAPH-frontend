@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import '../App.css'
 import { Button, Form, Container, Row, Col, Image } from 'react-bootstrap'
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import '../styles/Navbar.css'
 function Navbar() {
   return (
     <Container fluid>
       <Row className='titlebar'>
-        <Col>
-          Recipe Recommendation System
+        <Col className='siteName'>
+          Recipe House
           </Col>
         <Col>
           <Link to='/home'>Home</Link>
