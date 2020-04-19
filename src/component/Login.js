@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import '../App.css'
 import '../styles/Login.css'
 import { Button, Form } from 'react-bootstrap'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 class Login extends Component {
   constructor () {
     super()
