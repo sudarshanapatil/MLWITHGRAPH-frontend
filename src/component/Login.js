@@ -36,7 +36,7 @@ class Login extends Component {
       .then(loginRes=> {
         console.log('in res', loginRes)
         if(loginRes.code===200)
-        this.history.push('/home');
+        this.props.history.push('/home');
       })
       .catch(err => {
         console.log(err)
