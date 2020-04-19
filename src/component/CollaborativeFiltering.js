@@ -19,6 +19,8 @@ class Collaborative extends Component {
   }
 
   componentDidMount () {
+    let userName=this.props.location.state
+    console.log("username",userName)
     fetch(`${baseUrl}getuserrecommendation`, {
       method: 'post',
       headers: {
@@ -26,7 +28,7 @@ class Collaborative extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        userName: 'Spruha'
+        userName
       })
     })
       .then(res => res.json())

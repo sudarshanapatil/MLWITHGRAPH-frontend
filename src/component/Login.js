@@ -7,7 +7,7 @@ class Login extends Component {
   constructor () {
     super()
     this.state = {
-      showHome: false,
+      login: false,
       name: '',
       password: ''
     }
@@ -16,6 +16,15 @@ class Login extends Component {
   }
   login = () => {
     console.log('In register USer')
+   
+  }
+  handleChange (event) {
+    console.log(event.target.name, event.target.value)
+    this.setState({ [event.target.name]: event.target.value })
+  }
+  handleSubmit (event) {
+    console.log('in submit')
+    event.preventDefault()
     let { name, password } = this.state
 
     fetch('http://localhost:1337/login', {
@@ -26,11 +35,12 @@ class Login extends Component {
       body: JSON.stringify({ name, password })
     })
       .then(res => res.json())
-      .then(recipes => {
-        console.log('in res', recipes)
-        // this.setState({
-        //   showLogin: true
-        // })
+      .then(loginRes=> {
+        console.log('in res', loginRes)
+        if(loginRes.code===200)
+        this.setState({
+          login: true
+        })
       })
       .catch(err => {
         console.log(err)
@@ -38,14 +48,6 @@ class Login extends Component {
           recipes: []
         })
       })
-  }
-  handleChange (event) {
-    console.log(event.target.name, event.target.value)
-    this.setState({ [event.target.name]: event.target.value })
-  }
-  handleSubmit (event) {
-    console.log('in submit')
-    event.preventDefault()
   }
   render () {
     return (
@@ -77,7 +79,7 @@ class Login extends Component {
             </Form.Group>
 
             <Button variant='warning' type='submit'>
-              <Link to='/home'>Login</Link>
+             {this.state.login && <Link to='/home'>Login</Link>}
             </Button>
 
             <Button variant='info'>

@@ -14,7 +14,7 @@ class RateRecipe extends Component {
       show: false,
       recipeId: '',
       rating: '',
-       searchText: '',
+      searchText: '',
       searchCount: 0,
       detailRecipe: '',
       showDetailedRecipe: false,
@@ -26,26 +26,21 @@ class RateRecipe extends Component {
     console.log(event.target.value, "get")
     let searchText = (event.target.value).toLowerCase()
     if (searchText.length === 0 || searchText === '') {
-      this.setState({ recipes:this.state.apiData })
+      this.setState({ recipes: this.state.apiData, searchCount: 0 })
     }
     if (searchText.length > 3) {
       console.log('calling API')
-      let searchedData=this.searchData(this.state.apiData,searchText)
-      this.setState({       
-        recipes:searchedData,
+      let searchedData = this.searchData(this.state.apiData, searchText)
+      this.setState({
+        recipes: searchedData,
         searchText,
-        searchCount:searchedData.length,               
+        searchCount: searchedData.length,
       })
     }
-    // if (this.state.apiData && searchText !== '' && searchText.length > 3) {
-    //   let searchedData=this.searchData(this.state.recipes,searchText)
-    //   let searchCount=searchedData.length
-    //   this.setState({searchCount,searchText,recipes:searchedData,showCarousel:false,})
-    // }
 
   }
 
-  searchData=(recipes,searchText)=>{
+  searchData = (recipes, searchText) => {
     console.log("in search data fun")
     let searchedData = recipes.filter((recipe) => {
       if (((recipe.recipeName).toLowerCase()).search(searchText) !== -1)
@@ -53,7 +48,7 @@ class RateRecipe extends Component {
     })
     console.log(searchedData.length, "search data", searchedData[0], searchText)
     return searchedData;
-    
+
   }
   search = (event) => {
     console.log(event.target.value, "get")
@@ -103,7 +98,7 @@ class RateRecipe extends Component {
           return key.recipeName
         })
         console.log(recipes, 'API data')
-        this.setState({ recipes,apiData:recipes })
+        this.setState({ recipes, apiData: recipes })
       })
       .catch(err => {
         console.log(err)
@@ -122,29 +117,27 @@ class RateRecipe extends Component {
             Rate Following Recipes And Earn POINTS!!
           </Col>
           <Col>
-            <InputGroup className="mb-3">
+            <InputGroup className="searchBox">
               <FormControl
-                placeholder="Enter text to search"
+                placeholder="Enter recipe to search"
                 aria-label="Recipient's username"
                 aria-describedby="basic-addon2"
                 onChange={this.handleChange}
               />
+              <Button>Search</Button>
             </InputGroup>
           </Col>
         </Row>
-        <Row style={{
-          marginTop: 30,
-          alignContent: 'center',
-          justifyContent: 'center',
-          height: 1000,
-          textAlign: 'center',
-          overflowY: 'scroll'
-        }}>
+        <Row className='recipeDiv'>
+          {(this.state.searchCount > 0) && <Row className='searchTitle'>
+            {`${this.state.searchText} Recipes ${this.state.searchCount}`}
+          </Row>
+          }
           {this.state.recipes.map(recipe => (
             <div className='recipeRate' onClick={() => this.showModal(recipe.id)}>
               {recipe.recipeName}
             </div>
-           
+
           ))}
           <Modal
             show={this.state.show}
@@ -165,7 +158,7 @@ class RateRecipe extends Component {
                 </Button>
               })}
             </Modal.Body>
-          
+
           </Modal>
         </Row>
       </Container >

@@ -120,13 +120,13 @@ class Contentbased extends Component {
   render() {
     return (
       <Container fluid>
-        <Navbar/>
+        <Navbar />
         <Row className='contentbasedCotainer'>
           <Col sm={3} >
             <h4 id='ingredient-heading'>Select your ingredients</h4>
             <div id='selected-list'>
               {this.state.selected.map((selected, i) => (
-                <div class='selected ingredient'>
+                <div class=''>
                   {selected}
                   <span
                     class='floating-button'
@@ -157,48 +157,51 @@ class Contentbased extends Component {
               Following are dishes which you can prepare with selected
               ingredients:
             </Row>
-            {this.state.recipes.length != 0 && (this.state.showDetailedRecipe === false) &&
-              this.state.recipes.map(recipe => (
-                <Row className='recipe' onClick={() => this.showRecipe(recipe)}>
-                  <Row>
-                    <h4>{recipe.recipe}</h4>
-
+            <Row className='recipeList'>
+              {this.state.recipes.length === 0 && (
+                <p className='noDataStyle'>{this.state.recipesData}</p>
+              )}
+              {this.state.recipes.length != 0 && (this.state.showDetailedRecipe === false) &&
+                this.state.recipes.map(recipe => (
+                  <Row className='recipe' onClick={() => this.showRecipe(recipe)}>
+                    <Row>
+                      <h4>{recipe.recipe}</h4>
+                    </Row>
+                    <Row className='recipe-detail'>
+                      Ingredients: {recipe.ingredients.join(', ')}
+                    </Row>
                   </Row>
-                  <Row className='recipe-detail'>
-                    Ingredients: {recipe.ingredients.join(', ')}
+                ))}
+              {this.state.showDetailedRecipe === true && (
+                <div className='detailedView'>
+                  <Row className='detailedRecipeTitle'>
+                    {this.state.detailRecipe.recipe}
                   </Row>
+                  <Row className='recipeImageDetailView'>
+                    <Image src={require('../images/recipe3.jpg')}></Image>
+                  </Row>
+                  <Row className='detailedRecipeIngred'>
+                    Ingredients: {this.state.detailRecipe.ingredients.join(', ')}
+                  </Row>
+                  <Row className='recipeStepsTitle'>
+                    Steps
                 </Row>
-              ))}
-            {this.state.recipes.length === 0 && (
-              <p className='noDataStyle'>{this.state.recipesData}</p>
-            )}
-            {this.state.showDetailedRecipe === true && (
-              <div className='detailedView'>
-                <Row className='detailedRecipeTitle'>
-                  {this.state.detailRecipe.recipe}
-                </Row>
-                <Row>
-                  <Image src={require('../images/recipe3.jpg')}></Image>
-                </Row>
-                <Row className='detailedRecipeIngred'>
-                  ingredients: {this.state.detailRecipe.ingredients.join(', ')}
-                </Row>
-                <Row>
-                  Steps
-                </Row>
-                {steps.map((step, count) => {
-                  return (<Row className='recipeStep'>
-                   {`${count+1}}`}  {step}
-                  </Row>)
-                })}
-                <Row>
-                  <Button onClick={() => this.closeDetails()}>Close</Button>
-                </Row>
+                  {steps.map((step, count) => {
+                    return (<Row className='recipeStep'>
+                      {`${count + 1}}`}  {step}
+                    </Row>)
+                  })}
+                  <Row className='detailViewCloseBtn'>
+                    <Button onClick={() => this.closeDetails()}>Close</Button>
+                  </Row>
 
 
-              </div>
+                </div>
 
-            )}
+              )}
+            </Row>
+
+
             {/* </Row> */}
           </Col>
         </Row>
