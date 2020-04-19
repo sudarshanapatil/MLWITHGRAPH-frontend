@@ -2,12 +2,11 @@ import React, { Component } from 'react'
 import '../App.css'
 import '../styles/Login.css'
 import { Button, Form } from 'react-bootstrap'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 class Login extends Component {
   constructor () {
     super()
     this.state = {
-      login: false,
       name: '',
       password: ''
     }
@@ -15,8 +14,7 @@ class Login extends Component {
     this.handleChange = this.handleChange.bind(this)
   }
   login = () => {
-    console.log('In register USer')
-   
+    console.log('In register USer');
   }
   handleChange (event) {
     console.log(event.target.name, event.target.value)
@@ -38,9 +36,7 @@ class Login extends Component {
       .then(loginRes=> {
         console.log('in res', loginRes)
         if(loginRes.code===200)
-        this.setState({
-          login: true
-        })
+        this.history.push('/home');
       })
       .catch(err => {
         console.log(err)
@@ -79,7 +75,7 @@ class Login extends Component {
             </Form.Group>
 
             <Button variant='warning' type='submit'>
-             {this.state.login && <Link to='/home'>Login</Link>}
+              Login
             </Button>
 
             <Button variant='info'>
