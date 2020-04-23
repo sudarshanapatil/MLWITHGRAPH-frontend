@@ -3,6 +3,7 @@ import '../App.css'
 import '../styles/Login.css'
 import { Button, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import UserContext from '../UserContext';
 class Login extends Component {
   constructor() {
     super()
@@ -20,10 +21,10 @@ class Login extends Component {
     console.log(event.target.name, event.target.value)
     this.setState({ [event.target.name]: event.target.value })
   }
-  handleSubmit(event) {
+  handleSubmit(event, updateUsername) {
     console.log('in submit')
     event.preventDefault()
-    let { name, password } = this.state
+    let { name, password } = this.state;
 
     fetch('http://localhost:1337/login', {
       method: 'POST', // or 'PUT'
@@ -36,6 +37,7 @@ class Login extends Component {
       .then(loginRes => {
         console.log('in res', loginRes,this.state.name)
         if (loginRes.code === 200)
+              updateUsername(name);
           this.props.history.push({
             pathname: '/home',
             state: {
@@ -52,43 +54,47 @@ class Login extends Component {
   }
   render() {
     return (
-      <div className='login-body'>
-        <div className='login-section'>
-          Recipe Recommendation System
-          <Form onSubmit={this.handleSubmit}>
-            <Form.Group controlId='formBasicEmail'>
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type='text'
-                name='name'
-                placeholder='Enter email'
-                onChange={this.handleChange}
-              />
-              <Form.Text className='text-muted'>
-                We'll never share your email with anyone else.
-              </Form.Text>
-            </Form.Group>
+      <UserContext.Consumer>
+        {context => (
+        <div className='login-body'>
+          <div className='login-section'>
+            Recipe Recommendation System
+            <Form onSubmit={(e) => this.handleSubmit(e, context.updateUserName)}>
+              <Form.Group controlId='formBasicEmail'>
+                <Form.Label>Email address</Form.Label>
+                <Form.Control
+                  type='text'
+                  name='name'
+                  placeholder='Enter email'
+                  onChange={this.handleChange}
+                />
+                <Form.Text className='text-muted'>
+                  We'll never share your email with anyone else.
+                </Form.Text>
+              </Form.Group>
 
-            <Form.Group controlId='formBasicPassword'>
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type='password'
-                name='password'
-                onChange={this.handleChange}
-                placeholder='Password'
-              />
-            </Form.Group>
+              <Form.Group controlId='formBasicPassword'>
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type='password'
+                  name='password'
+                  onChange={this.handleChange}
+                  placeholder='Password'
+                />
+              </Form.Group>
 
-            <Button variant='warning' type='submit'>
-              Login
-            </Button>
+              <Button variant='warning' type='submit'>
+                Login
+              </Button>
 
-            <Button variant='info'>
-              <Link to='/register'>Register</Link>
-            </Button>
-          </Form>
+              <Button variant='info'>
+                <Link to='/register'>Register</Link>
+              </Button>
+            </Form>
+          </div>
         </div>
-      </div>
+        )}
+      </UserContext.Consumer>
     )
   }
 }

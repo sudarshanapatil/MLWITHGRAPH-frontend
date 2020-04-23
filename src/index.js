@@ -13,22 +13,24 @@ import Collaborative from './component/CollaborativeFiltering'
 import AddRecipe from './component/AddRecipe'
 import RateRecipe from './component/RateRecipe'
 import RecipeLevel from './component/RecipesWithSkill'
-
+import { UserProvider } from './UserContext';
 
 const routing = (
-  <Router>
-    <Switch>
-      <Route exact path="/" component={Login} />
-      <Route exact path="/login" component={Login} />
-      <Route exact path="/home" component={Home} />
-      <Route exact path="/register" component={Register} />
-      <Route exact path="/content" component={ContentBased} />
-      <Route exact path="/collaboration" component={Collaborative} />
-      <Route exact path="/addRecipe" component={AddRecipe} />
-      <Route exact path="/rateRecipe" component={RateRecipe} />
-      <Route exact path="/recipelevel" component={RecipeLevel} />
-    </Switch>
-  </Router>
+  <UserProvider>
+    <Router>
+      <Switch>
+        <Route exact path="/" component={Login} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/home" component={Home} />
+        <Route exact path="/register" component={Register} />
+        <Route exact path="/content" component={ContentBased} />
+        <Route exact path="/collaboration" component={Collaborative} />
+        <Route exact path="/addRecipe" component={AddRecipe} />
+        <Route exact path="/rateRecipe" component={RateRecipe} />
+        <Route exact path="/recipelevel" component={RecipeLevel} />
+      </Switch>
+    </Router>
+  </UserProvider>
 )
 ReactDOM.render(routing, document.getElementById('root'));
 

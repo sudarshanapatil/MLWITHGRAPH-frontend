@@ -3,6 +3,7 @@ import '../App.css'
 import '../styles/Collaborative.css'
 import { Container, Row } from 'react-bootstrap'
 import Navbar from './Navbar'
+import UserContext from '../UserContext';
 const baseUrl = 'http://localhost:1337/'
 
 class Collaborative extends Component {
@@ -14,7 +15,7 @@ class Collaborative extends Component {
       selected: [],
       recomRecipes: [],
       title: '',
-      currentUser: this.props.location.state.userName
+      currentUser: this.props.username
     }
   }
 
@@ -148,4 +149,10 @@ class Collaborative extends Component {
   }
 }
 
-export default Collaborative
+const withContext = () => (
+  <UserContext.Consumer>
+    { (contextProps) => (<Collaborative {...contextProps}/>)}
+  </UserContext.Consumer>
+);
+
+export default withContext;
