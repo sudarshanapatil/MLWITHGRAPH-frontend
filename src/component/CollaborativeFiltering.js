@@ -1,26 +1,27 @@
 import React, { Component } from 'react'
 import '../App.css'
 import '../styles/Collaborative.css'
-import { Container,Row } from 'react-bootstrap'
+import { Container, Row } from 'react-bootstrap'
 import Navbar from './Navbar'
 const baseUrl = 'http://localhost:1337/'
 
 class Collaborative extends Component {
-  constructor () {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       similarUser: [],
       recipes: [],
       selected: [],
       recomRecipes: [],
       title: '',
-      currentUser: ''
+      currentUser: this.props.location.state.userName
     }
   }
 
-  componentDidMount () {
-    let userName=this.props.location.state
-    console.log("username",userName)
+  componentDidMount() {
+
+    let userName = this.state.currentUser
+    console.log("username did", userName,this.props.location.state.userName)
     fetch(`${baseUrl}getuserrecommendation`, {
       method: 'post',
       headers: {
@@ -44,7 +45,7 @@ class Collaborative extends Component {
       })
   }
 
-  getRecipe (ingredients) {
+  getRecipe(ingredients) {
     if (ingredients.length === 0) {
       this.setState({
         recipes: []
@@ -71,7 +72,7 @@ class Collaborative extends Component {
     }
   }
 
-  getSimilarUser (userName) {
+  getSimilarUser(userName) {
     this.setState({ currentUser: userName })
     fetch(`${baseUrl}getsimilaruser`, {
       method: 'post',
@@ -108,7 +109,7 @@ class Collaborative extends Component {
       })
   }
 
-  getRecom (userName, similarUser) {
+  getRecom(userName, similarUser) {
     fetch(`${baseUrl}getuserrecommendation`, {
       method: 'post',
       headers: {
@@ -132,11 +133,11 @@ class Collaborative extends Component {
       })
   }
 
-  render () {
+  render() {
     return (
       <Container className='collaborativeContainer' fluid>
-        <Navbar/>
-        <Row className='sectionTitle'>Recommended Recipes For You Based On Your Simillar Users!</Row>
+        <Navbar />
+        <Row className='sectionTitle'>Recommended Recipes For You Based On Your Simillar Users {this.state.currentUser}!</Row>
         <Row id='recomm-recipes-list'>
           {this.state.recomRecipes.map(recipe => {
             return <div className='recomm-recipe-each'>{recipe}</div>

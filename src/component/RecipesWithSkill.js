@@ -28,6 +28,13 @@ class RecipesWithSkill extends Component {
       .then(res => res.json())
       .then(recomRecipes => {
         console.log(recomRecipes, 'recipeData')
+        recomRecipes.map(recipe=>{
+          if(recipe.cookingTime===0)
+          recipe.cookingTime='20 Mins'
+          else{
+            recipe.cookingTime=recipe.cookingTime/60 +" Min"
+          }
+        })
         this.setState({ difficultRecipes: recomRecipes,recipes:recomRecipes })
       })
       .catch(err => {
@@ -62,6 +69,13 @@ class RecipesWithSkill extends Component {
       .then(res => res.json())
       .then(recomRecipes => {
         console.log(recomRecipes, 'recipeData')
+        recomRecipes.map(recipe=>{
+          if(recipe.cookingTime===0)
+          recipe.cookingTime='45 Min'
+          else{
+            recipe.cookingTime=recipe.cookingTime/60 +" Min"
+          }
+        })
         this.setState({ recipes: recomRecipes ,easyRecipes:recomRecipes})
       })
       .catch(err => {

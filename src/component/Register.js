@@ -4,8 +4,8 @@ import { Button, Form } from 'react-bootstrap'
 
 import { Link } from 'react-router-dom'
 class Register extends Component {
-  constructor () {
-    super()
+  constructor (props) {
+    super(props)
     this.state = {
       name: '',
       password: '',
@@ -28,9 +28,12 @@ class Register extends Component {
       .then(res => res.json())
       .then(recipes => {
         console.log("in res",recipes)
-        this.setState({
-          showLogin:true
-        })
+        this.props.history.push({
+          pathname: '/login',
+          state: {
+            userName: this.state.name
+          }
+        });
       })
       .catch(err => {
         console.log(err)
@@ -80,7 +83,7 @@ class Register extends Component {
               type='submit'
               onClick={this.registerUser}
             >
-              {(this.state.showLogin) && <Link to='/login'>Register</Link>}
+              <Link to='/login'>Register</Link>
             </Button>
           </Form>
         </div>

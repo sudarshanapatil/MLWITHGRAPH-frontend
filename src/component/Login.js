@@ -4,7 +4,7 @@ import '../styles/Login.css'
 import { Button, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 class Login extends Component {
-  constructor () {
+  constructor() {
     super()
     this.state = {
       name: '',
@@ -16,11 +16,11 @@ class Login extends Component {
   login = () => {
     console.log('In register USer');
   }
-  handleChange (event) {
+  handleChange(event) {
     console.log(event.target.name, event.target.value)
     this.setState({ [event.target.name]: event.target.value })
   }
-  handleSubmit (event) {
+  handleSubmit(event) {
     console.log('in submit')
     event.preventDefault()
     let { name, password } = this.state
@@ -33,10 +33,15 @@ class Login extends Component {
       body: JSON.stringify({ name, password })
     })
       .then(res => res.json())
-      .then(loginRes=> {
-        console.log('in res', loginRes)
-        if(loginRes.code===200)
-        this.props.history.push('/home');
+      .then(loginRes => {
+        console.log('in res', loginRes,this.state.name)
+        if (loginRes.code === 200)
+          this.props.history.push({
+            pathname: '/home',
+            state: {
+              userName: this.state.name
+            }
+          });
       })
       .catch(err => {
         console.log(err)
@@ -45,7 +50,7 @@ class Login extends Component {
         })
       })
   }
-  render () {
+  render() {
     return (
       <div className='login-body'>
         <div className='login-section'>
