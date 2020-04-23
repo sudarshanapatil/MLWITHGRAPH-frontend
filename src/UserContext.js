@@ -11,7 +11,7 @@ export class UserProvider extends React.Component {
     return (
       <UserContext.Provider
         value={{
-          cars: this.state.username,
+          username: this.state.username,
           updateUserName: (username) => this.setState({username})
         }}
       >

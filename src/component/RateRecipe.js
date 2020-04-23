@@ -3,7 +3,10 @@ import '../App.css'
 import { Modal, Button, Container, Row, Col, FormControl, InputGroup } from 'react-bootstrap'
 import '../styles/RateRecipe.css'
 import Navbar from './Navbar'
+import UserContext from '../UserContext';
 const baseUrl = 'http://localhost:1337/'
+
+
 const ratingParameter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 class RateRecipe extends Component {
   constructor() {
@@ -56,7 +59,7 @@ class RateRecipe extends Component {
 
   }
   saveRating = (recipeId, rating) => {
-    console.log('in save rating ', recipeId)
+    console.log('in save rating ', recipeId,this.props.username)
     fetch(`${baseUrl}raterecipes`, {
       method: 'POST', // or 'PUT'
       headers: {
@@ -165,4 +168,12 @@ class RateRecipe extends Component {
     )
   }
 }
-export default RateRecipe
+// export default RateRecipe
+
+const withContext = () => (
+  <UserContext.Consumer>
+    { (contextProps) => (<RateRecipe {...contextProps}/>)}
+  </UserContext.Consumer>
+);
+
+export default withContext;

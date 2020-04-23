@@ -22,7 +22,7 @@ class Collaborative extends Component {
   componentDidMount() {
 
     let userName = this.state.currentUser
-    console.log("username did", userName,this.props.location.state.userName)
+    // console.log("username did", userName,this.props.location.state.userName)
     fetch(`${baseUrl}getuserrecommendation`, {
       method: 'post',
       headers: {
@@ -138,7 +138,7 @@ class Collaborative extends Component {
     return (
       <Container className='collaborativeContainer' fluid>
         <Navbar />
-        <Row className='sectionTitle'>Recommended Recipes For You Based On Your Simillar Users {this.state.currentUser}!</Row>
+        <Row className='sectionTitle'>Recommended Recipes For You Based On Your Simillar Users {this.props.username}!</Row>
         <Row id='recomm-recipes-list'>
           {this.state.recomRecipes.map(recipe => {
             return <div className='recomm-recipe-each'>{recipe}</div>
