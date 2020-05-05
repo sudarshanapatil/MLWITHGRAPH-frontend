@@ -3,7 +3,8 @@ import '../App.css'
 import { Button, Form, Container, Row, Col, Image } from 'react-bootstrap'
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import '../styles/Navbar.css'
-function Navbar() {
+function Navbar(props) {
+  console.log(props.userName,"lets see")
   return (
     <Row className='titlebar'>
       <Col className='siteName'>
@@ -19,7 +20,7 @@ function Navbar() {
         <Link to={{
           pathname: '/collaboration',
           state: {
-            userName: 'Jagrutee'
+            userName: props.userName
           }}} > Recommendation from US</Link>
         </Col>
       <Col>

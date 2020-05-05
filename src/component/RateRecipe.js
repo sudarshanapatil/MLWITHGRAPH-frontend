@@ -129,10 +129,10 @@ class RateRecipe extends Component {
           </Col>
         </Row>
         <Row className='recipeDiv'>
-          {(this.state.searchCount > 0) && <Row className='searchTitle'>
+          {/* {(this.state.searchCount > 0) && <Row className='searchTitle'>
             {`${this.state.searchText} Recipes ${this.state.searchCount}`}
           </Row>
-          }
+          } */}
           {this.state.recipes.map(recipe => (
             <div className='recipeRate' onClick={() => this.showModal(recipe.id)}>
               {recipe.recipeName}
@@ -149,7 +149,7 @@ class RateRecipe extends Component {
             </Modal.Header>
             <Modal.Body>
               {ratingParameter.map((rating, key) => {
-                rating = rating + 1
+                rating = rating 
                 return <Button
                   variant='secondary'
                   onClick={() => this.saveRating(this.state.recipeId, rating)}

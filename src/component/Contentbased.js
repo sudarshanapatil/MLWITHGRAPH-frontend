@@ -65,6 +65,10 @@ class Contentbased extends Component {
                 'Sorry, No recipes available for your selected ingredients'
             })
           }
+          recipes.map((recipe=>{
+            recipe.recipe=recipe.recipe.replace(/[^\w\s]/gi, '')
+            console.log(recipe,"recipe=======")
+          }))
           this.setState({ recipes })
         })
         .catch(err => {
@@ -79,7 +83,9 @@ class Contentbased extends Component {
   componentDidMount() {
     fetch(`${baseUrl}getallingredients`)
       .then(res => res.json())
-      .then(ingredients => this.setState({ ingredients }))
+      .then(ingredients => {
+        let correctIngred=ingredients.slice(5)
+        this.setState({ ingredients:correctIngred })})
       .catch(err => {
         console.log(err)
         this.setState({
