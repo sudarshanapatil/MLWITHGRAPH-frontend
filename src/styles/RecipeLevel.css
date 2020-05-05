@@ -1,7 +1,7 @@
 .recipeLevelTitle{
-  background-color:teal;
+  background-color:white;
   height: 60px;
-  color:white;
+  color:#CD5C5C;
   font-size: 25px;
   font-style: normal;
   text-align: center;
@@ -12,6 +12,15 @@
 }
 
 .recipeLevelContainer{
-  background-image: url("../images/food.jpg");
+  /* background-image: url("../images/food.jpg"); */
   flex-direction: column;
+}
+.skillLevelList {
+  flex-direction: row;
+  height: 100%;
+  min-width: 40%;
+  margin: 4px;
+  padding: 10px;
+  align-items: center;
+  justify-content: center;
 }

@@ -1,56 +1,53 @@
 import React, { Component } from 'react'
 import '../App.css'
-import { Nav, Form, Modal, Button, Container, Row, Col } from 'react-bootstrap'
+import { Nav, Image, Modal, Button, Container, Row, Col } from 'react-bootstrap'
 import Navbar from './Navbar'
 import '../styles/Contentbased.css'
+const baseUrl = 'http://localhost:1337/'
+let steps = [
+  'Take a pan and add butter in it',
+  'After the butter is melted add All purpose flour and roast it till it is pinkish coloured',
+  'Now add warm milk',
+  'Now quickly mix it well so that pieces are not created',
+  'Now add sugar,salt and black pepper',
+  'Mix it well',
+  'Now add fresh cream and 1cup cheese in it. Mix it well',
+  'Now white sauce is ready add pasta in it. Mix it well'
+]
 class Contentbased extends Component {
-  constructor () {
+  constructor() {
     super()
     this.state = {
       ingredients: [],
       recipes: [],
       selected: [],
+      detailRecipe: '',
       showDetailedRecipe: false,
       recipesData: 'People who love to eat are always the best people!!'
     }
   }
 
-  showRecipe = () => {
-    console.log('clicked Recipe')
+  showRecipe = (recipe) => {
+    console.log('clicked Recipe', recipe)
     this.setState({
-      showDetailedRecipe:true
+      showDetailedRecipe: true,
+      detailRecipe: recipe
     })
   }
 
-  RecipeDetails = props => {
-    return (
-      <Modal size='lg' aria-labelledby='contained-modal-title-vcenter' centered>
-        <Modal.Header closeButton>
-          <Modal.Title id='contained-modal-title-vcenter'>
-            Modal heading
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h4>Centered Modal</h4>
-          <p>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-            ac consectetur ac, vestibulum at eros.
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          {/* <Button onClick={props.onHide}>Close</Button> */}
-        </Modal.Footer>
-      </Modal>
-    )
+
+  closeDetails = () => {
+    this.setState({
+      showDetailedRecipe: false
+    })
   }
-  getRecipe (ingredients) {
+  getRecipe(ingredients) {
     if (ingredients.length === 0) {
       this.setState({
         recipes: []
       })
     } else {
-      fetch('http://localhost:1337/getrecipes', {
+      fetch(`${baseUrl}getrecipes`, {
         method: 'post',
         headers: {
           Accept: 'application/json',
@@ -79,8 +76,8 @@ class Contentbased extends Component {
     }
   }
 
-  componentDidMount () {
-    fetch('http://localhost:1337/getallingredients')
+  componentDidMount() {
+    fetch(`${baseUrl}getallingredients`)
       .then(res => res.json())
       .then(ingredients => this.setState({ ingredients }))
       .catch(err => {
@@ -91,7 +88,7 @@ class Contentbased extends Component {
       })
   }
 
-  moveToSelected (ingredient) {
+  moveToSelected(ingredient) {
     let selected = [...this.state.selected, ingredient].sort()
     this.getRecipe(selected)
     this.setState({
@@ -99,7 +96,7 @@ class Contentbased extends Component {
     })
   }
 
-  removefromSelected (i) {
+  removefromSelected(i) {
     let selected = this.state.selected
     selected.splice(i, 1)
     this.getRecipe(selected)
@@ -108,7 +105,7 @@ class Contentbased extends Component {
     })
   }
 
-  remainingIngredient () {
+  remainingIngredient() {
     const { selected, ingredients } = this.state
     let i = 0
     return ingredients.filter(ingredient => {
@@ -120,18 +117,16 @@ class Contentbased extends Component {
     })
   }
 
-  render () {
-    console.log(this.state.showDetailedRecipe,"bool")
+  render() {
     return (
       <Container fluid>
-        <Row>
-          {/* <Navbar/> */}
-          <Col sm={3} class='ingredient-container'>
-            {/* <div id='ingredient-container'> */}
+        <Navbar />
+        <Row className='contentbasedCotainer'>
+          <Col sm={3} >
             <h4 id='ingredient-heading'>Select your ingredients</h4>
             <div id='selected-list'>
               {this.state.selected.map((selected, i) => (
-                <div class='selected ingredient'>
+                <div class=''>
                   {selected}
                   <span
                     class='floating-button'
@@ -162,44 +157,51 @@ class Contentbased extends Component {
               Following are dishes which you can prepare with selected
               ingredients:
             </Row>
-            {/* <Row className='recipe-container'> */}
-            {this.state.recipes.length != 0 && (this.state.showDetailedRecipe==false) &&
-              this.state.recipes.map(recipe => (
-                <Row className='recipe' onClick={() => this.showRecipe()}>
-                  <h3>{recipe.recipe}</h3>
-                  <Row className='recipe-detail'>
-                    Ingredients: {recipe.ingredients.join(', ')}
+            <Row className='recipeList'>
+              {this.state.recipes.length === 0 && (
+                <p className='noDataStyle'>{this.state.recipesData}</p>
+              )}
+              {this.state.recipes.length != 0 && (this.state.showDetailedRecipe === false) &&
+                this.state.recipes.map(recipe => (
+                  <Row className='recipe' onClick={() => this.showRecipe(recipe)}>
+                    <Row>
+                      <h4>{recipe.recipe}</h4>
+                    </Row>
+                    <Row className='recipe-detail'>
+                      Ingredients: {recipe.ingredients.join(', ')}
+                    </Row>
                   </Row>
-                  {/* <button class="btn btn-primary">How to Make</button> */}
+                ))}
+              {this.state.showDetailedRecipe === true && (
+                <div className='detailedView'>
+                  <Row className='detailedRecipeTitle'>
+                    {this.state.detailRecipe.recipe}
+                  </Row>
+                  <Row className='recipeImageDetailView'>
+                    <Image src={require('../images/recipe3.jpg')}></Image>
+                  </Row>
+                  <Row className='detailedRecipeIngred'>
+                    Ingredients: {this.state.detailRecipe.ingredients.join(', ')}
+                  </Row>
+                  <Row className='recipeStepsTitle'>
+                    Steps
                 </Row>
-              ))}
-            {this.state.recipes.length === 0 && (
-              <p className='noDataStyle'>{this.state.recipesData}</p>
-            )}
-            {this.state.showDetailedRecipe == true && (
-              <Modal
-                size='lg'
-                aria-labelledby='contained-modal-title-vcenter'
-                centered
-              >
-                <Modal.Header closeButton>
-                  <Modal.Title id='contained-modal-title-vcenter'>
-                    Modal heading
-                  </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <h4>Centered Modal</h4>
-                  <p>
-                    Cras mattis consectetur purus sit amet fermentum. Cras justo
-                    odio, dapibus ac facilisis in, egestas eget quam. Morbi leo
-                    risus, porta ac consectetur ac, vestibulum at eros.
-                  </p>
-                </Modal.Body>
-                <Modal.Footer>
-                  {/* <Button onClick={props.onHide}>Close</Button> */}
-                </Modal.Footer>
-              </Modal>
-            )}
+                  {steps.map((step, count) => {
+                    return (<Row className='recipeStep'>
+                      {`${count + 1}}`}  {step}
+                    </Row>)
+                  })}
+                  <Row className='detailViewCloseBtn'>
+                    <Button onClick={() => this.closeDetails()}>Close</Button>
+                  </Row>
+
+
+                </div>
+
+              )}
+            </Row>
+
+
             {/* </Row> */}
           </Col>
         </Row>

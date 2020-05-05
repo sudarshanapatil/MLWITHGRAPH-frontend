@@ -1,9 +1,9 @@
 
 .titlebar {
-  background-color: teal;
+  background-color: #CD5C5C;
   padding: 4px;
-  height: 60px;
-  width: 100%;
+  height: 70px;
+  /* width: 100%; */
   text-align: center;
   justify-content: center;
   font-size: 25px;
@@ -14,7 +14,7 @@
 .homeContainer{
   width: 100vw;
   height: 100vh;
-  background-image: url("../images/food.jpg");
+  /* background-image: url("../images/food.jpg"); */
   /* opacity: 0.9 */
 }
 
@@ -45,13 +45,51 @@
   background-repeat: no-repeat;
   background-size: cover; */ 
 }
+.navContainer{
+  display: flex;
+}
+
+.searchContainer{
+margin: 40px;
+}
+
+.findRecipeText{
+  background-color: #CD5C5C;
+  color:white;
+  width:200px;
+  text-align: center;
+  font-size: 24px;
+}
+
+.navchoices{
+  background-color:snow;
+  color:red;
+  border-radius: 8px;
+  margin: 20px;
+  height: 80px;
+  text-align: center;
+  align-items: center;
+  width: 60%;
+  justify-content: center;
+}
+
+a{
+  color:white;
+  font-size: 20px;
+}
+
+.findRecipe{
+  width: 700px;
+  justify-content: center;
+  align-items: center;
+}
 
 .home-button-each {
   margin: 10px;
-  padding:4px;
-  width: 180px;;
-  height: 70px;
-  background-color:teal;
+  padding:10px;
+  width: 80%;;
+  height: 100px;
+  /* background-color:#C71585; */
   color:white;
   border-radius: 8px;
   text-align: center;
@@ -75,4 +113,22 @@
   margin: 120px;
   width:200px;
   height:300px
+}
+
+.searchedData{
+justify-content: center;
+}
+
+.searchedRecipe{
+  text-align: center;
+  height:60px;
+  width: 100%;
+  justify-content: center;
+  padding: 10px;
+  margin: 10px;
+  background-color: lightgray;
+}
+
+.searchTitle{
+  font-size: 30px;
 }

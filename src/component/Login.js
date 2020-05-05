@@ -2,20 +2,27 @@ import React, { Component } from 'react'
 import '../App.css'
 import '../styles/Login.css'
 import { Button, Form } from 'react-bootstrap'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 class Login extends Component {
   constructor () {
     super()
     this.state = {
-      showHome: false,
       name: '',
       password: ''
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
   }
-  checkLogin = () => {
-    console.log('In login USer')
+  login = () => {
+    console.log('In register USer');
+  }
+  handleChange (event) {
+    console.log(event.target.name, event.target.value)
+    this.setState({ [event.target.name]: event.target.value })
+  }
+  handleSubmit (event) {
+    console.log('in submit')
+    event.preventDefault()
     let { name, password } = this.state
 
     fetch('http://localhost:1337/login', {
@@ -26,12 +33,10 @@ class Login extends Component {
       body: JSON.stringify({ name, password })
     })
       .then(res => res.json())
-      .then(data => {
-        console.log('in res', data)
-        if(data.code===200)
-        this.setState({
-          showHome: true
-        })
+      .then(loginRes=> {
+        console.log('in res', loginRes)
+        if(loginRes.code===200)
+        this.props.history.push('/home');
       })
       .catch(err => {
         console.log(err)
@@ -39,14 +44,6 @@ class Login extends Component {
           recipes: []
         })
       })
-  }
-  handleChange (event) {
-    console.log(event.target.name, event.target.value)
-    this.setState({ [event.target.name]: event.target.value })
-  }
-  handleSubmit (event) {
-    console.log('in submit')
-    event.preventDefault()
   }
   render () {
     return (
@@ -77,12 +74,12 @@ class Login extends Component {
               />
             </Form.Group>
 
-            <Button variant='warning' type='submit' onClick={this.checkLogin}>
-              {this.state.showHome && <Link to='/home'>Login</Link>}
+            <Button variant='warning' type='submit'>
+              Login
             </Button>
 
             <Button variant='info'>
-              {/* <Link to='/register'>Register</Link> */}
+              <Link to='/register'>Register</Link> 
             </Button>
           </Form>
         </div>

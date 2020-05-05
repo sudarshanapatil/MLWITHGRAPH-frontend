@@ -1,7 +1,7 @@
 .sectionTitle {
-  background-color:teal;
+  background-color:white;
   height: 60px;
-  color:white;
+  color:#CD5C5C;
   font-size: 25px;
   font-style: normal;
   text-align: center;
@@ -12,7 +12,7 @@
 }
 
 .collaborativeContainer{
-  background-image: url("../images/food.jpg");
+  /* background-image: url("../images/food.jpg"); */
 }
 
 .recomm-recipe-each{

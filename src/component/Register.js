@@ -28,9 +28,10 @@ class Register extends Component {
       .then(res => res.json())
       .then(recipes => {
         console.log("in res",recipes)
-        this.setState({
-          showLogin:true
-        })
+        // this.setState({
+        //   showLogin:true
+        // })
+        this.props.history.push('/login');
       })
       .catch(err => {
         console.log(err)
@@ -80,7 +81,7 @@ class Register extends Component {
               type='submit'
               onClick={this.registerUser}
             >
-              {(this.state.showLogin) && <Link to='/login'>Register</Link>}
+              <Link to='/login'>Register</Link>
             </Button>
           </Form>
         </div>

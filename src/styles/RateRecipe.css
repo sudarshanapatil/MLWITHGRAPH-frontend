@@ -1,7 +1,7 @@
 .rateRecipeTitle{
-  background-color:teal;
+  background-color:snow;
   height: 60px;
-  color:white;
+  color:red;
   font-size: 25px;
   font-style: normal;
   text-align: center;
@@ -12,21 +12,48 @@
 }
 
 .rateRecipeContainer{
-  background-image: url("../images/food.jpg");
+  /* background-image: url("../images/food.jpg"); */
   flex-direction: column;
 }
 
+.detailedRecipeIngred{
+
+}
+
 .rateButton{
-  background-color: teal;
+  background-color: #CD5C5C;
 }
 
 .recipeRate{
-  background-color: teal;
+  background-color: #CD5C5C;
   /* flex-direction: column; */
   color:white;
-  margin:20px;
-  width:200px;
-  height:100px
+  margin:10px;
+  width:60%;
+  height:60px;
+  padding:15px;
+  border-radius: 5px;
+}
+.recomm-recipe-skill{
+  width: 700;
+  height:90px;
+  align-items: center;
+  justify-content: center;
+  background-color:beige;
+  border-radius: 8px;
+  color:black;
+  font-size: 20px;
+  margin: 5px;
+  padding: 10px;
+  text-align: center;
+}
+
+.recipeDiv{
+  margin-top: 30;
+  justify-content: center;
+  height: 1000px;
+  text-align: center;
+  overflow-Y: scroll
 }
 
 .add-recipe-container{
@@ -36,4 +63,14 @@
   flex-wrap: wrap;
   justify-content: center;
   align-content: center;
+  overflow-y: scroll;
+}
+
+.searchTitle{
+  font-size: 30px;
+  margin: 90px;
+}
+
+.searchBox{
+  width:400px
 }

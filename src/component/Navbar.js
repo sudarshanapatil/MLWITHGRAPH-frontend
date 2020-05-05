@@ -1,33 +1,34 @@
 import React, { Component } from 'react'
 import '../App.css'
-import { Button, Form, Container, Row, Col,Image } from 'react-bootstrap'
+import { Button, Form, Container, Row, Col, Image } from 'react-bootstrap'
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
-function Navbar () {
+import '../styles/Navbar.css'
+function Navbar() {
   return (
-    <div className='navbarContainer'>
-      <div className='navbarBody'>
-        <div className='clinicLogo'>
-          PATILS DENTAL AVENUE
-          {/* <Image src={require('./images/logo.png')} roundedCircle /> */}      
-          </div>
-        <Link to='/HomeAdmin'>
-          <div className='navbarItem'>Home</div>
-        </Link>
-        <Link to='/Services'>
-          <div className='navbarItem'>Select Your Ingredients</div>
-        </Link>
-        <Link to='/AboutUs'>
-          <div className='navbarItem'>Recomendation</div>
-        </Link>
-        <Link to='/Services'>
-          <div className='navbarItem'>Services</div>
-        </Link>
-        
-        <Link to='/AboutUs'>
-          <div className='navbarItem'>Contact Us</div>
-        </Link>
-      </div>
-    </div>
+    <Row className='titlebar'>
+      <Col className='siteName'>
+        Recipe House
+          </Col>
+      <Col>
+        <Link to='/home'>Home</Link>
+      </Col>
+      <Col>
+        <Link to='/content'>Based On Ingredients</Link>
+      </Col>
+      <Col>
+        <Link to={{
+          pathname: '/collaboration',
+          state: {
+            userName: 'Jagrutee'
+          }}} > Recommendation from US</Link>
+        </Col>
+      <Col>
+        <Link to='/rateRecipe'>Rate Recipes</Link>
+      </Col>
+      <Col>
+        <Link to='/recipelevel'>Categorized Recipes</Link>
+      </Col>
+    </Row>
   )
 }
 

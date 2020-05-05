@@ -1,5 +1,5 @@
 .titleContentbased{
-  background-color: teal;
+  background-color: #CD5C5C;
   /* width: 100%; */
   height:60px;
   color:white;
@@ -16,10 +16,18 @@
   padding-top: 10px;
 }
 
+.detailedRecipeTitle{
+ font-style: bold;
+ font-size: 30px;
+ padding:20px;
+ justify-content: center;
+
+
+}
 
 #ingredient-heading {
   text-align: center;
-  background-color: teal;
+  background-color: #CD5C5C;
   color: white;
   height:60px;
   padding: 5px;
@@ -43,6 +51,44 @@
   cursor: pointer;
 }
 
+.detailedRecipeIngred{
+  margin:20px;
+  justify-content: center;
+}
+
+.recipeStepsTitle{
+  justify-content: center;
+}
+
+.detailViewCloseBtn{
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.recipeStep{
+  /* justify-content: center; */
+  margin-left: 90px;
+}
+
+.btn-primary{
+  background-color:#CD5C5C;
+  border-color: none;
+}
+
+.detailedView{
+   width: 900;
+   /* height: 300; */
+   margin: 20px;
+   background-color:white;
+   padding:20px;
+   justify-content: center;
+  
+  }
+
+.recipeImageDetailView{
+  /* margin-left: 20px; */
+  justify-content: center;
+}  
 
 .recipe-container {
   margin-left: 150px;
@@ -62,39 +108,44 @@
   border: 1px solid black;
   border-radius: 5px;
   margin: 0px auto 20px;
-  padding: 5px;
+  padding: 20px;
   background-color: beige;
   width: 98%;
-  height:100px
+  height:150px
 
 }
 
-#selected-list,
+#selected-list{
+  border: 1px solid black;
+  background-color: aliceblue;
+}
 #ingredients-list {
   border: 1px solid black;
   background-color: aliceblue;
+  overflow-y: scroll;
+  height:800px
 }
 
 
 #selected-list > .selected {
-  background-color:teal;
+  background-color:#CD5C5C;
   font-weight: 600;
   color:white
 }
 
 .ingredient-container {
-  position: fixed;
-  left: 0;
+  /* position: fixed; */
+  /* left: 0; */
   overflow-y: scroll;
-  height: 100%;
-  min-width: 20%;
-  border: 1px solid black;
-  background-color: beige;
+  height: 1000px;
+  /* min-width: 20%; */
+  /* border: 1px solid black;
+  background-color: beige; */
 }
 
-.ingredient-container::-webkit-scrollbar {
+/* .ingredient-container::-webkit-scrollbar {
   display: none;
-}
+} */
 
 .noDataStyle{
   justify-content: center;
@@ -102,5 +153,16 @@
   text-align: center;
   font-size: 40px;
   background-color: white;
+  height: 50px;
+  width: 100%;
   
+}
+
+.contentbasedCotainer{
+  margin: 10px;
+}
+
+.recipeList{
+  overflow-y: scroll;
+  height: 780px;
 }
