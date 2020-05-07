@@ -27,7 +27,7 @@ function Navbar(props) {
         <Link to='/rateRecipe'>Rate Recipes</Link>
       </Col>
       <Col>
-        <Link to='/recipelevel'>Categorized Recipes</Link>
+        <Link to='/addrecipe'>Add recipe</Link>
       </Col>
     </Row>
   )
