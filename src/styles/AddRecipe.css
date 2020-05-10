@@ -1,0 +1,12 @@
+.col-form-label{
+width:400px;
+font-size: 20px;
+}
+
+.addRecipeForm{
+  justify-content: center;
+  align-items: center;
+}
+.formValues{
+  height: 50px;
+}
