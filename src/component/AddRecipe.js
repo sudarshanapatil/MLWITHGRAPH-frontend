@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import '../App.css'
+import '../styles/AddRecipe.css'
 import {
   Nav,
   Image,
@@ -14,15 +15,33 @@ import Navbar from './Navbar'
 
 import '../styles/Contentbased.css'
 const baseUrl = 'http://localhost:1337/'
-let steps = [
-  'Take a pan and add butter in it',
-  'After the butter is melted add All purpose flour and roast it till it is pinkish coloured',
-  'Now add warm milk',
-  'Now quickly mix it well so that pieces are not created',
-  'Now add sugar,salt and black pepper',
-  'Mix it well',
-  'Now add fresh cream and 1cup cheese in it. Mix it well',
-  'Now white sauce is ready add pasta in it. Mix it well'
+let formData = [
+  {
+    title: 'Recipe Name',
+    name: 'recipeName'
+  },
+  {
+    title: 'Description',
+    name: 'description',
+    as:'textarea'
+  },
+  {
+    title: 'Cooking Time',
+    name: 'cookingTime'
+  },
+  {
+    title: 'Preparation Time',
+    name: 'preparationTime'
+  },
+  {
+    title: 'Skill Level',
+    name: 'skillLevel',
+    as:'select',
+    option:<option>Easy</option>
+    
+     
+  },
+  
 ]
 class AddRecipe extends Component {
   constructor () {
@@ -163,88 +182,30 @@ class AddRecipe extends Component {
           </Col>
           <Col sm={9}>
             <Row className='titleContentbased'>Add Recipe</Row>
-            <Row>
-              <Form>
-                <Form.Group as={Row} controlId='formPlaintextPassword'>
-                  <Form.Label column sm='2'>
-                    Recipe Name
-                  </Form.Label>
-                  <Col sm='10'>
-                    <Form.Control
-                      type='input'
-                      placeholder='Recipe Name'
-                      name='recipeName'
-                      onChange={this.handleChange}
-                    />
-                  </Col>
-                </Form.Group>
-
-                <Form.Group as={Row} controlId='formPlaintextPassword'>
-                  <Form.Label column sm='2'>
-                    Auther Name
-                  </Form.Label>
-                  <Col sm='10'>
-                    <Form.Control
-                      type='input'
-                      placeholder='Auther name'
-                      name='autherName'
-                      onChange={this.handleChange}
-                    />
-                  </Col>
-                </Form.Group>
-                <Form.Group as={Row} controlId='formPlaintextPassword'>
-                  <Form.Label column sm='2'>
-                    Skill Level
-                  </Form.Label>
-                  <Col sm='10'>
-                    <Form.Control
-                      type='input'
-                      placeholder='Skill Level'
-                      name='skillLevel'
-                      onChange={this.handleChange}
-                    />
-                  </Col>
-                </Form.Group>
-                <Form.Group as={Row} controlId='formPlaintextPassword'>
-                  <Form.Label column sm='2'>
-                    Preparation Time
-                  </Form.Label>
-                  <Col sm='10'>
-                    <Form.Control
-                      type='input'
-                      placeholder='Preparation Time'
-                      name='preparationTime'
-                      onChange={this.handleChange}
-                    />
-                  </Col>
-                </Form.Group>
-                <Form.Group as={Row} controlId='formPlaintextPassword'>
-                  <Form.Label column sm='2'>
-                    Cooking Time
-                  </Form.Label>
-                  <Col sm='10'>
-                    <Form.Control
-                      type='input'
-                      placeholder='Cooking Time'
-                      name='cookingTime'
-                      onChange={this.handleChange}
-                    />
-                  </Col>
-                </Form.Group>
-                <Form.Group as={Row} controlId='formPlaintextPassword'>
-                  <Form.Label column sm='2'>
-                    Description
-                  </Form.Label>
-                  <Col sm='10'>
-                    <Form.Control
-                      type='input'
-                      placeholder='Description'
-                      name='description'
-                      onChange={this.handleChange}
-                    />
-                  </Col>
-                </Form.Group>
-              </Form>
+            <Row className='addRecipeForm'>
+              {formData.map(data => {
+                return (
+                  <Form.Group as={Row} >
+                    <Form.Label column sm='2'>
+                      {data.title}
+                    </Form.Label>
+                    <Col sm='10'>
+                      <Form.Control as={data.as}
+                        className='formValues'
+                        type='input'
+                        
+                        placeholder={data.title}
+                        name={data.name}
+                        onChange={this.handleChange}
+                      >
+                      {data.option}
+                      
+                      </Form.Control>
+                      
+                    </Col>
+                  </Form.Group>
+                )
+              })}              
             </Row>
             <Row className='detailViewCloseBtn'>
               <Button onClick={() => this.addRecipe()}>Add Recipe</Button>
@@ -256,3 +217,5 @@ class AddRecipe extends Component {
   }
 }
 export default AddRecipe
+
+
