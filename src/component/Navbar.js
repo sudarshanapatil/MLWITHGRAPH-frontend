@@ -4,7 +4,7 @@ import { Button, Form, Container, Row, Col, Image } from 'react-bootstrap'
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 import '../styles/Navbar.css'
 function Navbar(props) {
-  console.log(props.userName,"lets see")
+  // console.log(props.userName,"lets see")
   return (
     <Row className='titlebar'>
       <Col className='siteName'>

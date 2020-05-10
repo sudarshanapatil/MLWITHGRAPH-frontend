@@ -3,8 +3,8 @@ import '../App.css'
 import '../styles/AddRecipe.css'
 import {
   Nav,
-  Image,
-  Modal,
+  FormControl,
+  InputGroup,
   Button,
   Container,
   Row,
@@ -21,9 +21,13 @@ let formData = [
     name: 'recipeName'
   },
   {
+    title: 'Auther Name',
+    name: 'autherName'
+  },
+  {
     title: 'Description',
     name: 'description',
-    as:'textarea'
+    as: 'textarea'
   },
   {
     title: 'Cooking Time',
@@ -33,18 +37,23 @@ let formData = [
     title: 'Preparation Time',
     name: 'preparationTime'
   },
+
   {
     title: 'Skill Level',
     name: 'skillLevel',
-    as:'select',
-    option:<option>Easy</option>
-    
-     
+    as: 'select',
+    option: ['Easy', 'More Efforts'],
+
   },
-  
+  {
+    title: 'Procedure',
+    name: 'procedure',
+    button: 'add'
+  }
+
 ]
 class AddRecipe extends Component {
-  constructor () {
+  constructor() {
     super()
     this.state = {
       ingredients: [],
@@ -54,6 +63,8 @@ class AddRecipe extends Component {
       autherName: '',
       recipeName: '',
       skillLevel: '',
+      procedure: [],
+      recipeStep: '',
       showDetailedRecipe: false,
       recipesData: 'Add your recipe!!',
       cookingTime: '',
@@ -63,7 +74,7 @@ class AddRecipe extends Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
   }
-  moveToSelected (ingredient) {
+  moveToSelected(ingredient) {
     console.log(ingredient, 'selected list')
     let selected = [...this.state.selected, ingredient].sort()
     // this.getRecipe(selected)
@@ -71,15 +82,16 @@ class AddRecipe extends Component {
       selected
     })
   }
-  handleChange (event) {
+  handleChange(event) {
+
     this.setState({ [event.target.name]: event.target.value })
   }
-  handleSubmit (event) {
+  handleSubmit(event) {
     console.log(this.state)
     event.preventDefault()
   }
 
-  componentDidMount () {
+  componentDidMount() {
     fetch(`${baseUrl}getallingredients`)
       .then(res => res.json())
       .then(ingredients => {
@@ -93,8 +105,15 @@ class AddRecipe extends Component {
         })
       })
   }
+  addProcedure() {
+    // console.log("add procedure",this.state.procedure,this.state.recipeStep)
 
-  addRecipe () {
+    console.log("add procedure", this.state.procedure, this.state.recipeStep)
+    this.state.procedure.push(this.state.recipeStep)
+    this.setState({ procedure: this.state.procedure, recipeStep: '' })
+  }
+
+  addRecipe() {
     console.log(this.state, 'state')
     let {
       selected,
@@ -103,7 +122,8 @@ class AddRecipe extends Component {
       skillLevel,
       cookingTime,
       preparationTime,
-      description
+      description,
+      procedure
     } = this.state
     let data = {
       selected,
@@ -112,7 +132,8 @@ class AddRecipe extends Component {
       skillLevel,
       cookingTime,
       preparationTime,
-      description
+      description,
+      procedure
     }
     console.log(data, 'ghghghg')
     fetch(`${baseUrl}addrecipe`, {
@@ -133,7 +154,7 @@ class AddRecipe extends Component {
       })
   }
 
-  remainingIngredient () {
+  remainingIngredient() {
     const { selected, ingredients } = this.state
     let i = 0
     return ingredients.filter(ingredient => {
@@ -145,7 +166,7 @@ class AddRecipe extends Component {
     })
   }
 
-  render () {
+  render() {
     return (
       <Container fluid>
         <Navbar />
@@ -185,27 +206,58 @@ class AddRecipe extends Component {
             <Row className='addRecipeForm'>
               {formData.map(data => {
                 return (
-                  <Form.Group as={Row} >
-                    <Form.Label column sm='2'>
-                      {data.title}
-                    </Form.Label>
-                    <Col sm='10'>
-                      <Form.Control as={data.as}
-                        className='formValues'
-                        type='input'
-                        
-                        placeholder={data.title}
-                        name={data.name}
-                        onChange={this.handleChange}
-                      >
-                      {data.option}
-                      
-                      </Form.Control>
-                      
-                    </Col>
-                  </Form.Group>
+                  <div>
+                    {(!data.button) && <Form.Group as={Row} >
+                      <Form.Label column sm='2'>
+                        {data.title}
+                      </Form.Label>
+                      <Col sm='10'>
+                        <Form.Control as={data.as}
+                          className='formValues'
+                          type='input'
+                          placeholder={data.title}
+                          name={data.name}
+                          onChange={this.handleChange}
+                        >
+                          {(data.option) && (data.option.map((item) => {
+                            return (<option>{item}</option>)
+                          }))}
+                        </Form.Control>
+                      </Col> </Form.Group>
+                    }
+
+                    {
+                      (data.button) && (<Form.Group as={Row} >
+                        <InputGroup className="mb-3">
+                          <FormControl
+                            placeholder="Recipe step"
+                            name='recipeStep'
+                            onChange={this.handleChange}
+                            aria-label="Recipient's username"
+                            aria-describedby="basic-addon2"
+                          />
+                          <InputGroup.Append>
+                            <Button variant="outline-secondary"
+
+                              onClick={() => this.addProcedure()}>Button</Button>
+                          </InputGroup.Append>
+                        </InputGroup></Form.Group>)
+
+                    }
+                   
+                  </div>
                 )
-              })}              
+              })}
+               <Row className='showRecipeSteps'> 
+                    {
+                      (this.state.procedure.length > 0) &&
+                      (this.state.procedure.map((step,index) => {
+                        return (<Row>
+                         {index+1}. {step}
+                        </Row>)
+                      }))
+                    }
+                    </Row>
             </Row>
             <Row className='detailViewCloseBtn'>
               <Button onClick={() => this.addRecipe()}>Add Recipe</Button>

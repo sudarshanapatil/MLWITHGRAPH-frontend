@@ -10,3 +10,16 @@ font-size: 20px;
 .formValues{
   height: 50px;
 }
+.showRecipeSteps{
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #CD5C5C;
+  overflow-y: scroll;
+  color:white;
+  text-align: center;
+  height:200px
+
+}
