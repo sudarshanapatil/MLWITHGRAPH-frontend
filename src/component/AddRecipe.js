@@ -230,7 +230,7 @@ class AddRecipe extends Component {
                       (data.button) && (<Form.Group as={Row} >
                         <InputGroup className="mb-3">
                           <FormControl
-                            placeholder="Recipe step"
+                            placeholder="Describe recipe step"
                             name='recipeStep'
                             onChange={this.handleChange}
                             aria-label="Recipient's username"
@@ -239,25 +239,28 @@ class AddRecipe extends Component {
                           <InputGroup.Append>
                             <Button variant="outline-secondary"
 
-                              onClick={() => this.addProcedure()}>Button</Button>
+                              onClick={() => this.addProcedure()}>Add Step</Button>
                           </InputGroup.Append>
                         </InputGroup></Form.Group>)
 
                     }
-                   
+
                   </div>
                 )
               })}
-               <Row className='showRecipeSteps'> 
-                    {
-                      (this.state.procedure.length > 0) &&
-                      (this.state.procedure.map((step,index) => {
-                        return (<Row>
-                         {index+1}. {step}
-                        </Row>)
-                      }))
-                    }
-                    </Row>
+              <div>{
+
+                (this.state.procedure.length > 0) &&
+                <Row className='showRecipeSteps'>
+                  {(this.state.procedure.map((step, index) => {
+                    return (<Row>
+                      {index + 1}. {step}
+                    </Row>)
+                  }))}
+                </Row>
+              }
+              </div>
+
             </Row>
             <Row className='detailViewCloseBtn'>
               <Button onClick={() => this.addRecipe()}>Add Recipe</Button>
