@@ -83,7 +83,6 @@ class AddRecipe extends Component {
     })
   }
   handleChange(event) {
-
     this.setState({ [event.target.name]: event.target.value })
   }
   handleSubmit(event) {
@@ -135,23 +134,20 @@ class AddRecipe extends Component {
       description,
       procedure
     }
-    console.log(data, 'ghghghg')
     fetch(`${baseUrl}addrecipe`, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     })
       .then(res => res.json())
-      .then(ingredients => {
-        // let correctIngred = ingredients.slice(5)
-        // this.setState({ ingredients: correctIngred })
-      })
+      .then( ()=> {})
       .catch(err => {
         console.log(err)
         this.setState({
           ingredients: []
         })
       })
+  
   }
 
   remainingIngredient() {
@@ -248,7 +244,7 @@ class AddRecipe extends Component {
                   </div>
                 )
               })}
-              <div>{
+              <Row>{
 
                 (this.state.procedure.length > 0) &&
                 <Row className='showRecipeSteps'>
@@ -259,8 +255,7 @@ class AddRecipe extends Component {
                   }))}
                 </Row>
               }
-              </div>
-
+              </Row>
             </Row>
             <Row className='detailViewCloseBtn'>
               <Button onClick={() => this.addRecipe()}>Add Recipe</Button>
