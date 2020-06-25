@@ -2,14 +2,16 @@ import React, { Component } from 'react'
 import '../App.css'
 import '../styles/AddRecipe.css'
 import {
-  Nav,
+  Table,
   FormControl,
   InputGroup,
   Button,
   Container,
   Row,
   Col,
-  Form
+  Form,
+  Alert,
+  Modal
 } from 'react-bootstrap'
 import Navbar from './Navbar'
 
@@ -21,8 +23,8 @@ let formData = [
     name: 'recipeName'
   },
   {
-    title: 'Auther Name',
-    name: 'autherName'
+    title: 'Author Name',
+    name: 'authorName'
   },
   {
     title: 'Description',
@@ -60,16 +62,20 @@ class AddRecipe extends Component {
       recipes: [],
       selected: [],
       detailRecipe: '',
-      autherName: '',
+      authorName: '',
       recipeName: '',
-      skillLevel: '',
+      skillLevel: 'Easy',
       procedure: [],
       recipeStep: '',
       showDetailedRecipe: false,
       recipesData: 'Add your recipe!!',
       cookingTime: '',
       preparationTime: '',
-      description: ''
+      description: '',
+      showAlert: false,
+      authorRecipes: [],
+      alertHeading: '',
+      alertMessage: ''
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -103,21 +109,37 @@ class AddRecipe extends Component {
           ingredients: []
         })
       })
+    fetch(`${baseUrl}getwrittenrecipe`, {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ authorName: 'Suddu' })
+    })
+      .then(res => res.json())
+      .then(recipes => {
+        this.setState({ authorRecipes: recipes })
+        console.log(this.state.authorRecipes)
+      })
+      .catch(err => {
+        console.log(err)
+        this.setState({
+          ingredients: []
+        })
+      })
+
   }
   addProcedure() {
-    // console.log("add procedure",this.state.procedure,this.state.recipeStep)
-
     console.log("add procedure", this.state.procedure, this.state.recipeStep)
     this.state.procedure.push(this.state.recipeStep)
     this.setState({ procedure: this.state.procedure, recipeStep: '' })
   }
 
   addRecipe() {
+
     console.log(this.state, 'state')
     let {
       selected,
       recipeName,
-      autherName,
+      authorName,
       skillLevel,
       cookingTime,
       preparationTime,
@@ -127,27 +149,56 @@ class AddRecipe extends Component {
     let data = {
       selected,
       recipeName,
-      autherName,
+      authorName,
       skillLevel,
       cookingTime,
       preparationTime,
       description,
       procedure
     }
+
+    if (selected.length === 0 || recipeName === "" ||
+      authorName === "" ||
+      skillLevel === "" ||
+      cookingTime === "" ||
+      preparationTime === "" ||
+      description === "" ||
+      procedure === []) {
+      console.log("in if")
+      this.setState({
+        showAlert: true,
+        alertMessage: 'Please fill all the details',
+        alertHeading: 'Error in saving details'
+      })
+    }
+
     fetch(`${baseUrl}addrecipe`, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     })
       .then(res => res.json())
-      .then( ()=> {})
+      .then((res) => {
+        this.setState({
+          showAlert: true,
+          alertMessage: 'Successfully saved your recipe!',
+          alertHeading: 'Success!'
+        })
+        console.log(res, "API Response")
+      })
       .catch(err => {
         console.log(err)
         this.setState({
           ingredients: []
         })
       })
-  
+
+  }
+  handleClose = () => {
+    console.log("in close")
+    this.setState({
+      showAlert: false
+    })
   }
 
   remainingIngredient() {
@@ -166,15 +217,30 @@ class AddRecipe extends Component {
     return (
       <Container fluid>
         <Navbar />
+        {this.state.showAlert &&
+          <Modal show={true} onHide={this.handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>{this.state.alertHeading}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>{this.state.alertMessage}</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={this.handleClose}>
+                Ok
+            </Button>
+
+            </Modal.Footer>
+          </Modal>
+
+        }
         <Row className='contentbasedCotainer'>
           <Col sm={3}>
             <h4 id='ingredient-heading'>Select your ingredients</h4>
             <div id='selected-list'>
               {this.state.selected.map((selected, i) => (
-                <div class=''>
+                <div className=''>
                   {selected}
                   <span
-                    class='floating-button'
+                    className='floating-button'
                     onClick={() => this.removefromSelected(i)}
                   >
                     &times;
@@ -184,10 +250,10 @@ class AddRecipe extends Component {
               {/* </div> */}
               <div id='ingredients-list'>
                 {this.remainingIngredient().map(ingredient => (
-                  <div class='not-selected ingredient'>
+                  <div className='not-selected ingredient'>
                     {ingredient}
                     <span
-                      class='floating-button'
+                      className='floating-button'
                       onClick={() => this.moveToSelected(ingredient)}
                     >
                       +
@@ -204,10 +270,10 @@ class AddRecipe extends Component {
                 return (
                   <div>
                     {(!data.button) && <Form.Group as={Row} >
-                      <Form.Label column sm='2'>
+                      <Form.Label column sm='1'>
                         {data.title}
                       </Form.Label>
-                      <Col sm='10'>
+                      <Col sm='4'>
                         <Form.Control as={data.as}
                           className='formValues'
                           type='input'
@@ -259,6 +325,31 @@ class AddRecipe extends Component {
             </Row>
             <Row className='detailViewCloseBtn'>
               <Button onClick={() => this.addRecipe()}>Add Recipe</Button>
+            </Row>
+            <Row>
+              {
+                this.state.authorRecipes.length > 0 &&
+                (<Table striped bordered hover>
+                  <thead>
+                    <tr>                      
+                      <th>Recipe Name</th>
+                      <th>Description</th>
+                      <th>skill Level</th>
+                      <th>Preparation Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.authorRecipes.map((item => 
+                    <tr>
+                      <td>{item.name}</td>
+                      <td>{item.description}</td>
+                      <td>{item.skillLevel}</td>
+                      <td>{item.preparationTime.low}</td>
+                    </tr>))}
+                  </tbody>
+                </Table>)
+              }
+
             </Row>
           </Col>
         </Row>
