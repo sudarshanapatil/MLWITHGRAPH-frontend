@@ -4,8 +4,7 @@ import { Modal, Button, Container, Row, Col, FormControl, InputGroup } from 'rea
 import '../styles/RateRecipe.css'
 import Navbar from './Navbar'
 import UserContext from '../UserContext';
-const baseUrl = 'http://localhost:1337/'
-
+const baseUrl = 'http://localhost:1337/';
 
 const ratingParameter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 class RateRecipe extends Component {
@@ -55,11 +54,9 @@ class RateRecipe extends Component {
   }
   search = (event) => {
     console.log(event.target.value, "get")
-
-
   }
   saveRating = (recipeId, rating) => {
-    console.log('in save rating ', recipeId,this.props.username)
+    console.log('in save rating ', recipeId, this.props.username)
     fetch(`${baseUrl}raterecipes`, {
       method: 'POST', // or 'PUT'
       headers: {
@@ -152,7 +149,7 @@ class RateRecipe extends Component {
             </Modal.Header>
             <Modal.Body>
               {ratingParameter.map((rating, key) => {
-                rating = rating 
+                rating = rating
                 return <Button
                   variant='secondary'
                   onClick={() => this.saveRating(this.state.recipeId, rating)}
@@ -172,7 +169,7 @@ class RateRecipe extends Component {
 
 const withContext = () => (
   <UserContext.Consumer>
-    { (contextProps) => (<RateRecipe {...contextProps}/>)}
+    {(contextProps) => (<RateRecipe {...contextProps} />)}
   </UserContext.Consumer>
 );
 

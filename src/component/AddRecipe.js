@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import '../App.css'
-import '../styles/AddRecipe.css'
+import '../styles/AddRecipe.css';
+
+import UserContext from '../UserContext';
 import {
   Table,
   FormControl,
@@ -22,10 +24,10 @@ let formData = [
     title: 'Recipe Name',
     name: 'recipeName'
   },
-  {
-    title: 'Author Name',
-    name: 'authorName'
-  },
+  // {
+  //   title: 'Author Name',
+  //   name: 'authorName'
+  // },
   {
     title: 'Description',
     name: 'description',
@@ -55,8 +57,8 @@ let formData = [
 
 ]
 class AddRecipe extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       ingredients: [],
       recipes: [],
@@ -75,7 +77,8 @@ class AddRecipe extends Component {
       showAlert: false,
       authorRecipes: [],
       alertHeading: '',
-      alertMessage: ''
+      alertMessage: '',
+      currentUser: this.props.username
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
@@ -97,6 +100,7 @@ class AddRecipe extends Component {
   }
 
   componentDidMount() {
+    console.log("current user",this.state.currentUser)
     fetch(`${baseUrl}getallingredients`)
       .then(res => res.json())
       .then(ingredients => {
@@ -112,7 +116,7 @@ class AddRecipe extends Component {
     fetch(`${baseUrl}getwrittenrecipe`, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ authorName: 'Suddu' })
+      body: JSON.stringify({ authorName: this.state.currentUser })
     })
       .then(res => res.json())
       .then(recipes => {
@@ -134,22 +138,23 @@ class AddRecipe extends Component {
   }
 
   addRecipe() {
-
     console.log(this.state, 'state')
     let {
       selected,
       recipeName,
-      authorName,
+      currentUser,
       skillLevel,
       cookingTime,
       preparationTime,
       description,
       procedure
     } = this.state
+
+    let authorName;
     let data = {
       selected,
       recipeName,
-      authorName,
+      authorName:currentUser,
       skillLevel,
       cookingTime,
       preparationTime,
@@ -265,15 +270,39 @@ class AddRecipe extends Component {
           </Col>
           <Col sm={9}>
             <Row className='titleContentbased'>Add Recipe</Row>
-            <Row className='addRecipeForm'>
-              {formData.map(data => {
-                return (
-                  <div>
-                    {(!data.button) && <Form.Group as={Row} >
-                      <Form.Label column sm='1'>
+            <Row>
+              <Col sm={6} className='addRecipeForm'>
+                {formData.map(data => {
+                  return (
+                    <div>
+                      {(!data.button) && (!data.option) && <Form.Group as={Row} >
+                        <Form.Label column sm='3'>
+                          {data.title}
+                        </Form.Label>
+                        <Col sm='6'>
+                          <Form.Control as={data.as}
+                            className='formValues'
+                            type='input'
+                            placeholder={data.title}
+                            name={data.name}
+                            onChange={this.handleChange}
+                          >
+                          </Form.Control>
+                        </Col> </Form.Group>
+                      }
+                    </div>
+                  )
+                })}
+
+              </Col>
+              <Col sm={3}>
+                {formData.map(data => {
+                  return (<div>
+                    {(data.option) && <Form.Group as={Row} >
+                      <Form.Label column sm='3'>
                         {data.title}
                       </Form.Label>
-                      <Col sm='4'>
+                      <Col sm='6'>
                         <Form.Control as={data.as}
                           className='formValues'
                           type='input'
@@ -285,7 +314,9 @@ class AddRecipe extends Component {
                             return (<option>{item}</option>)
                           }))}
                         </Form.Control>
+
                       </Col> </Form.Group>
+
                     }
 
                     {
@@ -300,38 +331,36 @@ class AddRecipe extends Component {
                           />
                           <InputGroup.Append>
                             <Button variant="outline-secondary"
-
                               onClick={() => this.addProcedure()}>Add Step</Button>
                           </InputGroup.Append>
                         </InputGroup></Form.Group>)
-
                     }
 
-                  </div>
-                )
-              })}
-              <Row>{
-
-                (this.state.procedure.length > 0) &&
-                <Row className='showRecipeSteps'>
-                  {(this.state.procedure.map((step, index) => {
-                    return (<Row>
-                      {index + 1}. {step}
-                    </Row>)
-                  }))}
+                  </div>)
+                })}
+                <Row>{
+                  (this.state.procedure.length > 0) &&
+                  <Row className='showRecipeSteps'>
+                    {(this.state.procedure.map((step, index) => {
+                      return (<Row>
+                        {index + 1}. {step}
+                      </Row>)
+                    }))}
+                  </Row>
+                }
                 </Row>
-              }
-              </Row>
-            </Row>
-            <Row className='detailViewCloseBtn'>
-              <Button onClick={() => this.addRecipe()}>Add Recipe</Button>
+                <Row className='detailViewCloseBtn'>
+                  <Button onClick={() => this.addRecipe()}>Add Recipe</Button>
+                </Row>
+              </Col>
+
             </Row>
             <Row>
               {
                 this.state.authorRecipes.length > 0 &&
                 (<Table striped bordered hover>
                   <thead>
-                    <tr>                      
+                    <tr>
                       <th>Recipe Name</th>
                       <th>Description</th>
                       <th>skill Level</th>
@@ -339,13 +368,13 @@ class AddRecipe extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {this.state.authorRecipes.map((item => 
-                    <tr>
-                      <td>{item.name}</td>
-                      <td>{item.description}</td>
-                      <td>{item.skillLevel}</td>
-                      <td>{item.preparationTime.low}</td>
-                    </tr>))}
+                    {this.state.authorRecipes.map((item =>
+                      <tr>
+                        <td>{item.name}</td>
+                        <td>{item.description}</td>
+                        <td>{item.skillLevel}</td>
+                        <td>{item.preparationTime.low}</td>
+                      </tr>))}
                   </tbody>
                 </Table>)
               }
@@ -357,6 +386,16 @@ class AddRecipe extends Component {
     )
   }
 }
-export default AddRecipe
+
+const withContext = () => (
+  <UserContext.Consumer>
+    { (contextProps) => (<AddRecipe {...contextProps}/>)}
+  </UserContext.Consumer>
+);
+
+export default withContext;
+// export default AddRecipe
+
+
 
 
