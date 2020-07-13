@@ -8,8 +8,8 @@ const baseUrl = 'http://localhost:1337/';
 
 const ratingParameter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 class RateRecipe extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       recipes: [],
       setShow: false,
@@ -20,7 +20,9 @@ class RateRecipe extends Component {
       searchCount: 0,
       detailRecipe: '',
       showDetailedRecipe: false,
+      currentUser:this.props.username
     }
+    
     // this.handleChange = this.handleChange.bind(this);
   }
 
@@ -62,10 +64,11 @@ class RateRecipe extends Component {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ recipeId, rating })
+      body: JSON.stringify({ recipeId, rating ,user:this.state.currentUser})
     })
       .then(res => res.json())
       .then(recipes => {
+        console.log(this.state)
         this.handleClose()
       })
       .catch(err => {

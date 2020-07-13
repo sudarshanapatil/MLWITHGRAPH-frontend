@@ -24,10 +24,6 @@ let formData = [
     title: 'Recipe Name',
     name: 'recipeName'
   },
-  // {
-  //   title: 'Author Name',
-  //   name: 'authorName'
-  // },
   {
     title: 'Description',
     name: 'description',
@@ -100,7 +96,7 @@ class AddRecipe extends Component {
   }
 
   componentDidMount() {
-    console.log("current user",this.state.currentUser)
+    console.log("current user", this.state.currentUser)
     fetch(`${baseUrl}getallingredients`)
       .then(res => res.json())
       .then(ingredients => {
@@ -154,7 +150,7 @@ class AddRecipe extends Component {
     let data = {
       selected,
       recipeName,
-      authorName:currentUser,
+      authorName: currentUser,
       skillLevel,
       cookingTime,
       preparationTime,
@@ -176,27 +172,31 @@ class AddRecipe extends Component {
         alertHeading: 'Error in saving details'
       })
     }
+    else {
+      fetch(`${baseUrl}addrecipe`, {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+        .then(res => res.json())
+        .then((res) => {
+          console.log("after adding")
+          this.setState({
+            showAlert: true,
+            alertMessage: 'Successfully saved your recipe!',
+            alertHeading: 'Success!',
+            authorRecipes: res.authorRecipes
+          })
+          console.log(res, "API Response")
+        })
 
-    fetch(`${baseUrl}addrecipe`, {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    })
-      .then(res => res.json())
-      .then((res) => {
-        this.setState({
-          showAlert: true,
-          alertMessage: 'Successfully saved your recipe!',
-          alertHeading: 'Success!'
+        .catch(err => {
+          console.log(err)
+          this.setState({
+            ingredients: []
+          })
         })
-        console.log(res, "API Response")
-      })
-      .catch(err => {
-        console.log(err)
-        this.setState({
-          ingredients: []
-        })
-      })
+    }
 
   }
   handleClose = () => {
@@ -389,7 +389,7 @@ class AddRecipe extends Component {
 
 const withContext = () => (
   <UserContext.Consumer>
-    { (contextProps) => (<AddRecipe {...contextProps}/>)}
+    {(contextProps) => (<AddRecipe {...contextProps} />)}
   </UserContext.Consumer>
 );
 

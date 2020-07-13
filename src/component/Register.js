@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import '../App.css'
 import { Button, Form } from 'react-bootstrap'
-
 import { Link } from 'react-router-dom'
+
 class Register extends Component {
   constructor (props) {
     super(props)
@@ -16,7 +16,7 @@ class Register extends Component {
   }
   registerUser = () => {
     console.log("In register USer")
-    let { name, password } = this.state
+    let { name, password } = this.state 
 
     fetch('http://localhost:1337/register', {
       method: 'POST', // or 'PUT'
