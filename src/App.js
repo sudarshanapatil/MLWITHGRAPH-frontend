@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Login from './component/Login';
+// import Login from './component/Login';
+import Home from './component/Home';
 import {
   Container
 } from 'react-bootstrap';
@@ -12,7 +13,7 @@ class App extends Component {
   render() {
     return (
       <Container>
-        <Login />
+        <Home />
       </Container>
     )
   }

@@ -5,7 +5,7 @@ import * as serviceWorker from './serviceWorker';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
 
 import Home from './component/Home'
-import Login from './component/Login'
+// import Login from './component/Login'
 import Register from './component/Register'
 import ContentBased from './component/Contentbased'
 import Collaborative from './component/CollaborativeFiltering'
@@ -18,8 +18,8 @@ const routing = (
   <UserProvider>
     <Router>
       <Switch>
-        <Route exact path="/" component={Login} />
-        <Route exact path="/login" component={Login} />
+        <Route exact path="/" component={Home} />
+        {/* <Route exact path="/login" component={Login} /> */}
         <Route exact path="/home" component={Home} />
         <Route exact path="/register" component={Register} />
         <Route exact path="/content" component={ContentBased} />

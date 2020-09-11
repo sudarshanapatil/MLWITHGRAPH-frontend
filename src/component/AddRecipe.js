@@ -121,7 +121,7 @@ class AddRecipe extends Component {
           .then(res => res.json())
           .then(recipes => {
             this.setState({ authorRecipes: recipes, ingredients: correctIngred })
-            console.log(this.state.authorRecipes)
+            // console.log(this.state.authorRecipes)
           })
           .catch(err => {
             console.log(err)
@@ -265,7 +265,7 @@ class AddRecipe extends Component {
               {/* </div> */}
               <div id='ingredients-list'>
                 {this.remainingIngredient().map(ingredient => (
-                  <div className='not-selected ingredient'>
+                  <div className='not-selected ingredient' key={ingredient}>
                     {ingredient}
                     <span
                       className='floating-button'
@@ -284,7 +284,7 @@ class AddRecipe extends Component {
               <Col sm={6} className='addRecipeForm'>
                 {formData.map(data => {
                   return (
-                    <div>
+                    <div key={data.title}>
                       {(!data.button) && (!data.option) && <Form.Group as={Row} >
                         <Form.Label column sm='3'>
                           {data.title}
@@ -307,7 +307,7 @@ class AddRecipe extends Component {
               </Col>
               <Col sm={3}>
                 {formData.map(data => {
-                  return (<div>
+                  return (<div key={data.title}>
                     {(data.option) && <Form.Group as={Row} >
                       <Form.Label column sm='3'>
                         {data.title}
@@ -321,7 +321,7 @@ class AddRecipe extends Component {
                           onChange={this.handleChange}
                         >
                           {(data.option) && (data.option.map((item) => {
-                            return (<option>{item}</option>)
+                            return (<option key={item}>{item}</option>)
                           }))}
                         </Form.Control>
 
@@ -410,7 +410,7 @@ class AddRecipe extends Component {
                   </thead>
                   <tbody>
                     {this.state.authorRecipes.map((item =>
-                      <tr onClick={() => this.showRecipe(item)}>
+                      <tr onClick={() => this.showRecipe(item)} key={item.name}>
                         <td>{item.name}</td>
                         <td>{item.description}</td>
                         <td>{item.skillLevel}</td>
