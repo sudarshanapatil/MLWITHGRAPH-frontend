@@ -7,7 +7,7 @@ import {
   Row,
   Col, Image, Button
 } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import '../App.css'
 import '../styles/Home.css'
 import Navbar from './Navbar'
@@ -41,12 +41,13 @@ const carouselData = [
     alt: ''
   }
 ]
+const baseUrl = 'https://recomsystemnode.herokuapp.com/';
 class Home extends Component {
   constructor(props) {
     super(props)
     this.state = {
       render: '',
-      currentUser: this.props.location.state != undefined ? this.props.location.state.userName : "Sudarshana",
+      currentUser: this.props.location.state !== undefined ? this.props.location.state.userName : "Sudarshana",
       apiData: false,
       recipes: [],
       searchedData: [],
@@ -57,24 +58,18 @@ class Home extends Component {
       showDetailedRecipe: false,
     }
     if (this.props.location.state) {
-      let userName = this.props.location.state.userName
-
-      console.log("username from lofin", userName)
+      // let userName = this.props.location.state.userName
     }
   }
   handleChange = (event) => {
-    console.log(event.target.value, "get")
-    let searchText = (event.target.value).toLowerCase()
-    // this.setState({ [event.target.name]: event.target.value });
+    let searchText = (event.target.value).toLowerCase();
     if (searchText.length === 0 || searchText === '') {
       this.setState({ showCarousel: true, searchText })
     }
     if (searchText.length > 3 && !this.state.apiData) {
-      console.log('calling API', this.state.apiData)
-      fetch('http://localhost:1337/getallrecipes')
+      fetch(`${baseUrl}getallrecipes`)
         .then(res => res.json())
         .then(recipes => {
-          console.log(recipes.length, "apidata length")
           let searchedData = this.searchData(recipes, searchText)
           this.setState({
             apiData: true,
@@ -87,40 +82,25 @@ class Home extends Component {
           })
         })
         .catch(err => {
-          console.log(err)
           this.setState({
             recipes: []
           })
         })
-
-
     }
     if (this.state.apiData && searchText !== '' && searchText.length > 3) {
       let searchedData = this.searchData(this.state.recipes, searchText)
       let searchCount = searchedData.length
       this.setState({ searchCount, searchText, searchedData, showCarousel: false, })
     }
-
   }
 
   searchData = (recipes, searchText) => {
-    console.log("in search data fun")
-    let searchedData = recipes.filter((recipe) => {
-      if (((recipe.recipeName).toLowerCase()).search(searchText) !== -1)
-        return recipe
+    return recipes.filter((recipe) => {
+      let recipeName = recipe.recipeName;
+      return recipeName.toLowerCase().search(searchText) !== -1;
     })
-    console.log(searchedData.length, "search data", searchedData[0], searchText)
-    return searchedData;
-    // this.setState({
-    //   searchedData,
-    //   showCarousel: false,
-    //   searchText,
-    //   count: searchedData.length
-    // })
-
   }
   showRecipe = (recipe) => {
-    console.log('clicked Recipe', recipe)
     this.setState({
       showDetailedRecipe: true,
       detailRecipe: recipe
@@ -132,7 +112,6 @@ class Home extends Component {
     })
   }
   render() {
-    console.log(this.state.detailRecipe, "detail");
     return (
       // <div className='backgroundImage'></div>
       <Container className='homeContainer' fluid>
@@ -158,7 +137,7 @@ class Home extends Component {
         {this.state.showCarousel && <Row className='home-caroulsel'>
           <Carousel>
             {carouselData.map((data, index) => {
-              return <Carousel.Item>
+              return <Carousel.Item key={index}>
                 <img
                   className='img-carousel'
                   src={data.image}
@@ -174,8 +153,6 @@ class Home extends Component {
             })}
           </Carousel>
         </Row>}
-
-
         {!this.state.showCarousel && !this.state.showDetailedRecipe &&
           <Row className='searchedData'>
             <Row className='searchTitle'>
@@ -184,7 +161,7 @@ class Home extends Component {
 
             {this.state.searchedData.map((recipe, key) => {
               return (
-                <Row className='searchedRecipe' key={key} onClick={() => this.showRecipe(recipe)}>
+                <Row className='searchedRecipe' key={key + recipe} onClick={() => this.showRecipe(recipe)}>
                   {recipe.recipeName}
                 </Row>
               )
@@ -192,7 +169,6 @@ class Home extends Component {
           </Row>
         }
         {
-
           this.state.showDetailedRecipe && (
             <div className='detailedView'>
               <Row className='detailedRecipeTitle'>
@@ -208,17 +184,14 @@ class Home extends Component {
                 Steps
                 </Row>
               {steps.map((step, count) => {
-                return (<Row className='recipeStep'>
+                return (<Row className='recipeStep' key={count}>
                   {`${count + 1}}`}  {step}
                 </Row>)
               })}
               <Row>
                 <Button onClick={() => this.closeDetails()}>Close</Button>
               </Row>
-
-
             </div>
-
           )}
       </Container>
     )

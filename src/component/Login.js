@@ -11,22 +11,17 @@ class Login extends Component {
       name: '',
       password: ''
     }
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleChange = this.handleChange.bind(this)
   }
   login = () => {
-    console.log('In register USer');
   }
-  handleChange(event) {
-    console.log(event.target.name, event.target.value)
+  handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
   }
-  handleSubmit(event, updateUsername) {
-    console.log('in submit')
+  handleSubmit = (event, updateUsername) => {
     event.preventDefault()
     let { name, password } = this.state;
 
-    fetch('http://localhost:1337/login', {
+    fetch('https://recomsystemnode.herokuapp.com/login', {
       method: 'POST', // or 'PUT'
       headers: {
         'Content-Type': 'application/json'
@@ -35,18 +30,16 @@ class Login extends Component {
     })
       .then(res => res.json())
       .then(loginRes => {
-        console.log('in res', loginRes,this.state.name)
         if (loginRes.code === 200)
-              updateUsername(name);
-          this.props.history.push({
-            pathname: '/home',
-            state: {
-              userName: this.state.name
-            }
-          });
+          updateUsername(name);
+        this.props.history.push({
+          pathname: '/home',
+          state: {
+            userName: this.state.name
+          }
+        });
       })
       .catch(err => {
-        console.log(err)
         this.setState({
           recipes: []
         })
@@ -56,43 +49,41 @@ class Login extends Component {
     return (
       <UserContext.Consumer>
         {context => (
-        <div className='login-body'>
-          <div className='login-section'>
-            Recipe Recommendation System
+          <div className='login-body'>
+            <div className='login-section'>
+              Recipe Recommendation System
             <Form onSubmit={(e) => this.handleSubmit(e, context.updateUserName)}>
-              <Form.Group controlId='formBasicEmail'>
-                <Form.Label>Email address</Form.Label>
-                <Form.Control
-                  type='text'
-                  name='name'
-                  placeholder='Enter email'
-                  onChange={this.handleChange}
-                />
-                <Form.Text className='text-muted'>
-                  We'll never share your email with anyone else.
+                <Form.Group controlId='formBasicEmail'>
+                  <Form.Label>Email address</Form.Label>
+                  <Form.Control
+                    type='text'
+                    name='name'
+                    placeholder='Enter email'
+                    onChange={this.handleChange}
+                  />
+                  <Form.Text className='text-muted'>
+                    We'll never share your email with anyone else.
                 </Form.Text>
-              </Form.Group>
+                </Form.Group>
+                <Form.Group controlId='formBasicPassword'>
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type='password'
+                    name='password'
+                    onChange={this.handleChange}
+                    placeholder='Password'
+                  />
+                </Form.Group>
 
-              <Form.Group controlId='formBasicPassword'>
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type='password'
-                  name='password'
-                  onChange={this.handleChange}
-                  placeholder='Password'
-                />
-              </Form.Group>
-
-              <Button variant='warning' type='submit'>
-                Login
+                <Button variant='warning' type='submit'>
+                  Login
               </Button>
-
-              <Button variant='info'>
-                <Link to='/register'>Register</Link>
-              </Button>
-            </Form>
+                <Button variant='info'>
+                  <Link to='/register'>Register</Link>
+                </Button>
+              </Form>
+            </div>
           </div>
-        </div>
         )}
       </UserContext.Consumer>
     )

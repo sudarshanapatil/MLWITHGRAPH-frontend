@@ -12,13 +12,23 @@ import {
   Row,
   Col,
   Form,
-  Alert,
+  Image,
   Modal
 } from 'react-bootstrap'
 import Navbar from './Navbar'
 
-import '../styles/Contentbased.css'
-const baseUrl = 'http://localhost:1337/'
+import '../styles/Contentbased.css';
+let steps = [
+  'Take a pan and add butter in it',
+  'After the butter is melted add All purpose flour and roast it till it is pinkish coloured',
+  'Now add warm milk',
+  'Now quickly mix it well so that pieces are not created',
+  'Now add sugar,salt and black pepper',
+  'Mix it well',
+  'Now add fresh cream and 1cup cheese in it. Mix it well',
+  'Now white sauce is ready add pasta in it. Mix it well'
+]
+const baseUrl = 'https://recomsystemnode.herokuapp.com/';
 let formData = [
   {
     title: 'Recipe Name',
@@ -80,9 +90,7 @@ class AddRecipe extends Component {
     this.handleChange = this.handleChange.bind(this)
   }
   moveToSelected(ingredient) {
-    console.log(ingredient, 'selected list')
     let selected = [...this.state.selected, ingredient].sort()
-    // this.getRecipe(selected)
     this.setState({
       selected
     })
@@ -91,50 +99,51 @@ class AddRecipe extends Component {
     this.setState({ [event.target.name]: event.target.value })
   }
   handleSubmit(event) {
-    console.log(this.state)
     event.preventDefault()
   }
 
   componentDidMount() {
-    console.log("current user", this.state.currentUser)
+    // Promise.all([fetch(`${baseUrl}getallingredients`),fetch(`${baseUrl}getwrittenrecipe`, {
+    //   method: 'post',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ authorName: this.state.currentUser })
+    // })])
+    // .then((res)=>console.log(res,"in promise"))
     fetch(`${baseUrl}getallingredients`)
       .then(res => res.json())
       .then(ingredients => {
-        let correctIngred = ingredients.slice(5)
-        this.setState({ ingredients: correctIngred })
-      })
-      .catch(err => {
-        console.log(err)
-        this.setState({
-          ingredients: []
+        let correctIngred = ingredients.slice(300)
+        fetch(`${baseUrl}getwrittenrecipe`, {
+          method: 'post',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ authorName: this.state.currentUser })
         })
-      })
-    fetch(`${baseUrl}getwrittenrecipe`, {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ authorName: this.state.currentUser })
-    })
-      .then(res => res.json())
-      .then(recipes => {
-        this.setState({ authorRecipes: recipes })
-        console.log(this.state.authorRecipes)
+          .then(res => res.json())
+          .then(recipes => {
+            this.setState({ authorRecipes: recipes, ingredients: correctIngred })
+            console.log(this.state.authorRecipes)
+          })
+          .catch(err => {
+            console.log(err)
+            this.setState({
+              ingredients: []
+            })
+          })
       })
       .catch(err => {
-        console.log(err)
         this.setState({
           ingredients: []
         })
       })
 
+
   }
   addProcedure() {
-    console.log("add procedure", this.state.procedure, this.state.recipeStep)
     this.state.procedure.push(this.state.recipeStep)
     this.setState({ procedure: this.state.procedure, recipeStep: '' })
   }
 
   addRecipe() {
-    console.log(this.state, 'state')
     let {
       selected,
       recipeName,
@@ -164,8 +173,7 @@ class AddRecipe extends Component {
       cookingTime === "" ||
       preparationTime === "" ||
       description === "" ||
-      procedure === []) {
-      console.log("in if")
+      procedure === []) {     
       this.setState({
         showAlert: true,
         alertMessage: 'Please fill all the details',
@@ -180,18 +188,14 @@ class AddRecipe extends Component {
       })
         .then(res => res.json())
         .then((res) => {
-          console.log("after adding")
           this.setState({
             showAlert: true,
             alertMessage: 'Successfully saved your recipe!',
             alertHeading: 'Success!',
             authorRecipes: res.authorRecipes
           })
-          console.log(res, "API Response")
         })
-
         .catch(err => {
-          console.log(err)
           this.setState({
             ingredients: []
           })
@@ -199,8 +203,12 @@ class AddRecipe extends Component {
     }
 
   }
+  closeDetails = () => {
+    this.setState({
+      showDetailedRecipe: false
+    })
+  }
   handleClose = () => {
-    console.log("in close")
     this.setState({
       showAlert: false
     })
@@ -217,7 +225,9 @@ class AddRecipe extends Component {
       return true
     })
   }
-
+  showRecipe=(recipe)=>{
+    this.setState({showDetailedRecipe:true,detailRecipe:recipe})
+  }
   render() {
     return (
       <Container fluid>
@@ -355,9 +365,40 @@ class AddRecipe extends Component {
               </Col>
 
             </Row>
-            <Row>
+            <Row className='authorTable'>
               {
-                this.state.authorRecipes.length > 0 &&
+                this.state.showDetailedRecipe &&
+                (
+                  <div className='detailedView'>
+                    <Row className='detailedRecipeTitle'>
+                      {this.state.detailRecipe.name}
+                      {/* {this.state.detailRecipe.cookingTime} */}
+                    </Row>
+                    <Row className='recipeImageDetailView'>
+                      <Image src={require('../images/recipe4.jpg')}></Image>
+                    </Row>
+                    <Row className='detailedRecipeIngred'>
+                      {/* Ingredients: {this.state.detailRecipe.ingredients.join(', ')} */}
+                    </Row>
+                    <Row className='recipeStepsTitle'>
+                      Steps
+                  </Row>
+                    {steps.map((step, count) => {
+                      return (<Row className='recipeStep'>
+                        {`${count + 1}}`}  {step}
+                      </Row>)
+                    })}
+                    <Row className='detailViewCloseBtn'>
+                      <Button onClick={() => this.closeDetails()}>Close</Button>
+                    </Row>
+  
+  
+                  </div>
+  
+                )
+              }
+              {
+                this.state.authorRecipes.length > 0 && !this.state.showDetailedRecipe &&
                 (<Table striped bordered hover>
                   <thead>
                     <tr>
@@ -369,7 +410,7 @@ class AddRecipe extends Component {
                   </thead>
                   <tbody>
                     {this.state.authorRecipes.map((item =>
-                      <tr>
+                      <tr onClick={() => this.showRecipe(item)}>
                         <td>{item.name}</td>
                         <td>{item.description}</td>
                         <td>{item.skillLevel}</td>

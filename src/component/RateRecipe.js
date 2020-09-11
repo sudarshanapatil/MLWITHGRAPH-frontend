@@ -4,9 +4,9 @@ import { Modal, Button, Container, Row, Col, FormControl, InputGroup } from 'rea
 import '../styles/RateRecipe.css'
 import Navbar from './Navbar'
 import UserContext from '../UserContext';
-const baseUrl = 'http://localhost:1337/';
+const baseUrl = 'https://recomsystemnode.herokuapp.com/';
 
-const ratingParameter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+const ratingParameter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 class RateRecipe extends Component {
   constructor(props) {
     super(props)
@@ -20,20 +20,16 @@ class RateRecipe extends Component {
       searchCount: 0,
       detailRecipe: '',
       showDetailedRecipe: false,
-      currentUser:this.props.username
+      currentUser: this.props.username
     }
-    
-    // this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange = (event) => {
-    console.log(event.target.value, "get")
     let searchText = (event.target.value).toLowerCase()
     if (searchText.length === 0 || searchText === '') {
       this.setState({ recipes: this.state.apiData, searchCount: 0 })
     }
     if (searchText.length > 3) {
-      console.log('calling API')
       let searchedData = this.searchData(this.state.apiData, searchText)
       this.setState({
         recipes: searchedData,
@@ -41,30 +37,25 @@ class RateRecipe extends Component {
         searchCount: searchedData.length,
       })
     }
-
   }
 
   searchData = (recipes, searchText) => {
-    console.log("in search data fun")
-    let searchedData = recipes.filter((recipe) => {
-      if (((recipe.recipeName).toLowerCase()).search(searchText) !== -1)
-        return recipe
+    return recipes.filter((recipe) => {
+      let recipeName = recipe.recipeName;
+      return recipeName.toLowerCase().search(searchText) !== -1;
     })
-    console.log(searchedData.length, "search data", searchedData[0], searchText)
-    return searchedData;
+  }
 
-  }
   search = (event) => {
-    console.log(event.target.value, "get")
   }
+
   saveRating = (recipeId, rating) => {
-    console.log('in save rating ', recipeId, this.props.username)
     fetch(`${baseUrl}raterecipes`, {
       method: 'POST', // or 'PUT'
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ recipeId, rating ,user:this.state.currentUser})
+      body: JSON.stringify({ recipeId, rating, user: this.state.currentUser })
     })
       .then(res => res.json())
       .then(recipes => {
@@ -80,7 +71,6 @@ class RateRecipe extends Component {
   }
 
   handleClose = () => {
-    console.log('in close')
     this.setState({ show: false })
   }
 
@@ -89,7 +79,6 @@ class RateRecipe extends Component {
   }
 
   showModal = recipeId => {
-    console.log('in modal', recipeId)
     this.handleShow(recipeId)
   }
 
@@ -97,10 +86,6 @@ class RateRecipe extends Component {
     fetch(`${baseUrl}getallrecipes`)
       .then(res => res.json())
       .then(recipes => {
-        let recipesData = recipes.map(key => {
-          return key.recipeName
-        })
-        console.log(recipes, 'API data')
         this.setState({ recipes, apiData: recipes })
       })
       .catch(err => {
@@ -137,7 +122,7 @@ class RateRecipe extends Component {
           </Row>
           } */}
           {this.state.recipes.map(recipe => (
-            <div className='recipeRate' onClick={() => this.showModal(recipe.id)}>
+            <div className='recipeRate' key={recipe.id} onClick={() => this.showModal(recipe.id)}>
               {recipe.recipeName}
             </div>
 
@@ -152,9 +137,9 @@ class RateRecipe extends Component {
             </Modal.Header>
             <Modal.Body>
               {ratingParameter.map((rating, key) => {
-                rating = rating
                 return <Button
                   variant='secondary'
+                  key={key}
                   onClick={() => this.saveRating(this.state.recipeId, rating)}
                 >
                   {rating}

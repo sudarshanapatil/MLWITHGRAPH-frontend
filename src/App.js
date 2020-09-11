@@ -1,23 +1,18 @@
-import React, { Component } from 'react'
-import Login from './component/Login'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import React, { Component } from 'react';
+import Login from './component/Login';
 import {
-  Button,
-  ButtonToolbar,
-  Container,
-  Row,
-  Carousel,
-  Col
-} from 'react-bootstrap'
-import './App.css'
+  Container
+} from 'react-bootstrap';
+
+import './App.css';
 class App extends Component {
-  constructor () {
+  constructor() {
     super()
   }
-  render () {
+  render() {
     return (
       <Container>
-            <Login />        
+        <Login />
       </Container>
     )
   }

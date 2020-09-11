@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 import '../App.css'
-import { Button, Form, Container, Row, Col, Image } from 'react-bootstrap'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { Row, Col } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import '../styles/Navbar.css'
 function Navbar(props) {
   // console.log(props.userName,"lets see")
@@ -21,8 +21,9 @@ function Navbar(props) {
           pathname: '/collaboration',
           state: {
             userName: props.userName
-          }}} > Recommendation from US</Link>
-        </Col>
+          }
+        }} > Recommendation from US</Link>
+      </Col>
       <Col>
         <Link to='/rateRecipe'>Rate Recipes</Link>
       </Col>

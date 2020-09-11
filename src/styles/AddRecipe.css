@@ -20,11 +20,16 @@ font-size: 20px;
   overflow-y: scroll;
   color:white;
   text-align: center;
-  height:200px;
+ 
   margin-left: 60px;
 
 }
 
 .col-form-label{
   width: 900px;
+}
+
+.authorTable{
+  height:600px;
+  overflow-Y: scroll
 }

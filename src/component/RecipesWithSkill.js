@@ -1,7 +1,9 @@
-import React, { Component } from 'react'
-import { Container, Row, Col, FormControl, Form } from 'react-bootstrap'
-import '../styles/RecipeLevel.css'
-import Navbar from './Navbar'
+import React, { Component } from 'react';
+import { Container, Row, Col, Form } from 'react-bootstrap';
+import '../styles/RecipeLevel.css';
+import Navbar from './Navbar';
+
+const baseUrl = 'https://recomsystemnode.herokuapp.com/';
 class RecipesWithSkill extends Component {
   constructor() {
     super()
@@ -12,10 +14,9 @@ class RecipesWithSkill extends Component {
     }
   }
   handleChange = (event) => {
-    let level=event.target.value
-    console.log(event.target.value, "get")
+    let level = event.target.value;
     if (this.state.difficultRecipes.length === 0) {
-      fetch('http://localhost:1337/getrecipelevel', {
+      fetch(`${baseUrl}getrecipelevel`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -25,38 +26,37 @@ class RecipesWithSkill extends Component {
           skillLevel: event.target.value
         })
       })
-      .then(res => res.json())
-      .then(recomRecipes => {
-        console.log(recomRecipes, 'recipeData')
-        recomRecipes.map(recipe=>{
-          if(recipe.cookingTime===0)
-          recipe.cookingTime='20 Mins'
-          else{
-            recipe.cookingTime=recipe.cookingTime/60 +" Min"
-          }
+        .then(res => res.json())
+        .then(recomRecipes => {
+          recomRecipes.map(recipe => {
+            if (recipe.cookingTime === 0)
+              recipe.cookingTime = '20 Mins'
+            else {
+              recipe.cookingTime = recipe.cookingTime / 60 + " Min"
+            }
+            return recipe;
+          })
+          this.setState({ difficultRecipes: recomRecipes, recipes: recomRecipes })
         })
-        this.setState({ difficultRecipes: recomRecipes,recipes:recomRecipes })
-      })
-      .catch(err => {
-        console.log(err)
-        this.setState({
-          recomRecipes: []
+        .catch(err => {
+          this.setState({
+            recomRecipes: []
+          })
         })
-      })
     }
-    if(level==='Easy')
-    this.setState({
-      recipes:this.state.easyRecipes
-    })
-    else{
+    if (level === 'Easy')
       this.setState({
-        recipes:this.state.difficultRecipes
+        recipes: this.state.easyRecipes
+      })
+    else {
+      this.setState({
+        recipes: this.state.difficultRecipes
       })
     }
   }
 
   componentDidMount() {
-    fetch('http://localhost:1337/getrecipelevel', {
+    fetch(`${baseUrl}getrecipelevel`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -68,43 +68,21 @@ class RecipesWithSkill extends Component {
     })
       .then(res => res.json())
       .then(recomRecipes => {
-        console.log(recomRecipes, 'recipeData')
-        recomRecipes.map(recipe=>{
-          if(recipe.cookingTime===0)
-          recipe.cookingTime='45 Min'
-          else{
-            recipe.cookingTime=recipe.cookingTime/60 +" Min"
+        recomRecipes.map(recipe => {
+          if (recipe.cookingTime === 0)
+            recipe.cookingTime = '45 Min';
+          else {
+            recipe.cookingTime = recipe.cookingTime / 60 + " Min";
           }
+          return recipe;
         })
-        this.setState({ recipes: recomRecipes ,easyRecipes:recomRecipes})
+        this.setState({ recipes: recomRecipes, easyRecipes: recomRecipes })
       })
       .catch(err => {
-        console.log(err)
         this.setState({
           recomRecipes: []
         })
       })
-    //   fetch('http://localhost:1337/getrecipelevel', {
-    //   method: 'post',
-    //   headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   // body: JSON.stringify({
-    //   //   userName: 'Spruha'
-    //   // })
-    // })
-    //   .then(res => res.json())
-    //   .then(recomRecipes => {
-    //     console.log(recomRecipes, 'recipeData')
-    //     this.setState({ recomRecipes })
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //     this.setState({
-    //       recomRecipes: []
-    //     })
-    //   })
   }
   render() {
     return (
@@ -129,7 +107,7 @@ class RecipesWithSkill extends Component {
         </Row>
         <Row className='skillLevelList'>
           <Col>
-            {(this.state.recipes.length != 0) && this.state.recipes.map(recipe => {
+            {(this.state.recipes.length !== 0) && this.state.recipes.map(recipe => {
               return <div className='recomm-recipe-skill'>{recipe.name}
                 <br />
                 {recipe.cookingTime}

@@ -3,6 +3,7 @@ import '../App.css'
 import { Button, Form } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
+const baseUrl = 'https://recomsystemnode.herokuapp.com/';
 class Register extends Component {
   constructor (props) {
     super(props)
@@ -15,10 +16,9 @@ class Register extends Component {
     this.handleChange = this.handleChange.bind(this)
   }
   registerUser = () => {
-    console.log("In register USer")
     let { name, password } = this.state 
 
-    fetch('http://localhost:1337/register', {
+    fetch(`${baseUrl}/register`, {
       method: 'POST', // or 'PUT'
       headers: {
         'Content-Type': 'application/json'
@@ -27,7 +27,6 @@ class Register extends Component {
     })
       .then(res => res.json())
       .then(recipes => {
-        console.log("in res",recipes)
         this.props.history.push({
           pathname: '/login',
           state: {
@@ -36,18 +35,15 @@ class Register extends Component {
         });
       })
       .catch(err => {
-        console.log(err)
         this.setState({
           recipes: []
         })
       })
   }
   handleChange (event) {
-    console.log(event.target.name, event.target.value)
     this.setState({ [event.target.name]: event.target.value })
   }
   handleSubmit (event) {
-    console.log('in submit')
     event.preventDefault()
   }
   render () {

@@ -1,11 +1,28 @@
 import React, { Component } from 'react'
 import '../App.css'
 import '../styles/Collaborative.css'
-import { Container, Row } from 'react-bootstrap'
+import { Container, Row, Image, Button } from 'react-bootstrap'
 import Navbar from './Navbar'
 import UserContext from '../UserContext';
-const baseUrl = 'http://localhost:1337/'
+const baseUrl = 'https://recomsystemnode.herokuapp.com/';
+let steps = [
+  'Take a pan and add butter in it',
+  'After the butter is melted add All purpose flour and roast it till it is pinkish coloured',
+  'Now add warm milk',
+  'Now quickly mix it well so that pieces are not created',
+  'Now add sugar,salt and black pepper',
+  'Mix it well',
+  'Now add fresh cream and 1cup cheese in it. Mix it well',
+  'Now white sauce is ready add pasta in it. Mix it well'
+]
 
+let polularRecipes = [
+  'Green tomato chutney',
+  'Ultimate onion tart',
+  'Vegan mug cake',
+  'Green apple salad',
+  'Gnocchi bolognese with spinach'
+]
 class Collaborative extends Component {
   constructor(props) {
     super(props)
@@ -15,7 +32,9 @@ class Collaborative extends Component {
       selected: [],
       recomRecipes: [],
       title: '',
-      currentUser: this.props.username
+      detailRecipe: '',
+      currentUser: this.props.username,
+      showDetailedRecipe: false
     }
   }
 
@@ -36,6 +55,10 @@ class Collaborative extends Component {
       .then(res => res.json())
       .then(recomRecipes => {
         console.log(recomRecipes, 'recipeData')
+        if (recomRecipes.length === 0) {
+          this.setState({ recomRecipes: polularRecipes })
+        }
+        else
         this.setState({ recomRecipes })
       })
       .catch(err => {
@@ -73,65 +96,19 @@ class Collaborative extends Component {
     }
   }
 
-  getSimilarUser(userName) {
-    this.setState({ currentUser: userName })
-    fetch(`${baseUrl}getsimilaruser`, {
-      method: 'post',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        userName
-      })
+  showRecipe = (recipe) => {
+    console.log('clicked Recipe', recipe)
+    this.setState({
+      showDetailedRecipe: true,
+      detailRecipe: recipe
     })
-      .then(res => res.json())
-      .then(similarUser => {
-        console.log(similarUser, 'similarUser')
-        this.getRecom(userName, similarUser)
-        // fetch(`${baseUrl}getuserrating`, {
-        //   method: 'post',
-        //   headers: {
-        //     Accept: 'application/json',
-        //     'Content-Type': 'application/json'
-        //   },
-        //   body: JSON.stringify({
-        //     userName
-        //   })
-        // }).then(res => {
-        //   console.log('res: ', res)
-        // })
-      })
-      .catch(err => {
-        console.log(err)
-        this.setState({
-          recomRecipes: []
-        })
-      })
   }
 
-  getRecom(userName, similarUser) {
-    fetch(`${baseUrl}getuserrecommendation`, {
-      method: 'post',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        userName: 'Spruha'
-      })
+
+  closeDetails = () => {
+    this.setState({
+      showDetailedRecipe: false
     })
-      .then(res => res.json())
-      .then(recomRecipes => {
-        console.log(recomRecipes, 'recipeData')
-        this.setState({ recomRecipes, similarUser })
-      })
-      .catch(err => {
-        console.log(err)
-        this.setState({
-          recomRecipes: []
-        })
-      })
   }
 
   render() {
@@ -140,9 +117,38 @@ class Collaborative extends Component {
         <Navbar />
         <Row className='sectionTitle'>Recommended Recipes For You Based On Your Simillar Users {this.props.username}!</Row>
         <Row id='recomm-recipes-list'>
-          {this.state.recomRecipes.map(recipe => {
-            return <div className='recomm-recipe-each'>{recipe}</div>
-          })}
+          {this.state.showDetailedRecipe === false &&
+            this.state.recomRecipes.map((recipe, index) => {
+              return <div key={index} onClick={() => this.showRecipe(recipe)} className='recomm-recipe-each'>{recipe}</div>
+            })}
+
+          {this.state.showDetailedRecipe === true && (
+            <div className='detailedView'>
+              <Row className='detailedRecipeTitle'>
+                {this.state.detailRecipe}
+              </Row>
+              <Row className='recipeImageDetailView'>
+                <Image src={require('../images/recipe1.jpg')}></Image>
+              </Row>
+              <Row className='detailedRecipeIngred'>
+                {/* Ingredients: {this.state.detailRecipe.ingredients.join(', ')} */}
+              </Row>
+              <Row className='recipeStepsTitle'>
+                Steps
+                </Row>
+              {steps.map((step, count) => {
+                return (<Row className='recipeStep'>
+                  {`${count + 1}}`}  {step}
+                </Row>)
+              })}
+              <Row className='detailViewCloseBtn'>
+                <Button onClick={() => this.closeDetails()}>Close</Button>
+              </Row>
+
+
+            </div>
+
+          )}
         </Row>
       </Container>
     )
@@ -151,7 +157,7 @@ class Collaborative extends Component {
 
 const withContext = () => (
   <UserContext.Consumer>
-    { (contextProps) => (<Collaborative {...contextProps}/>)}
+    {(contextProps) => (<Collaborative {...contextProps} />)}
   </UserContext.Consumer>
 );
 

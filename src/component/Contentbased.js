@@ -1,9 +1,10 @@
-import React, { Component } from 'react'
-import '../App.css'
-import { Nav, Image, Modal, Button, Container, Row, Col } from 'react-bootstrap'
-import Navbar from './Navbar'
-import '../styles/Contentbased.css'
-const baseUrl = 'http://localhost:1337/'
+import React, { Component } from 'react';
+import '../App.css';
+import { Image, Button, Container, Row, Col } from 'react-bootstrap';
+
+import Navbar from './Navbar';
+import '../styles/Contentbased.css';
+const baseUrl = 'https://recomsystemnode.herokuapp.com/';
 let steps = [
   'Take a pan and add butter in it',
   'After the butter is melted add All purpose flour and roast it till it is pinkish coloured',
@@ -28,19 +29,18 @@ class Contentbased extends Component {
   }
 
   showRecipe = (recipe) => {
-    console.log('clicked Recipe', recipe)
     this.setState({
       showDetailedRecipe: true,
       detailRecipe: recipe
     })
   }
 
-
   closeDetails = () => {
     this.setState({
       showDetailedRecipe: false
     })
   }
+
   getRecipe(ingredients) {
     if (ingredients.length === 0) {
       this.setState({
@@ -65,14 +65,12 @@ class Contentbased extends Component {
                 'Sorry, No recipes available for your selected ingredients'
             })
           }
-          recipes.map((recipe=>{
-            recipe.recipe=recipe.recipe.replace(/[^\w\s]/gi, '')
-            console.log(recipe,"recipe=======")
+          recipes.map((recipe => {
+            return recipe.recipe.replace(/[^\w\s]/gi, '');
           }))
           this.setState({ recipes })
         })
         .catch(err => {
-          console.log(err)
           this.setState({
             recipes: []
           })
@@ -84,10 +82,10 @@ class Contentbased extends Component {
     fetch(`${baseUrl}getallingredients`)
       .then(res => res.json())
       .then(ingredients => {
-        let correctIngred=ingredients.slice(5)
-        this.setState({ ingredients:correctIngred })})
+        let correctIngred = ingredients.slice(300)
+        this.setState({ ingredients: correctIngred })
+      })
       .catch(err => {
-        console.log(err)
         this.setState({
           ingredients: []
         })
@@ -132,10 +130,10 @@ class Contentbased extends Component {
             <h4 id='ingredient-heading'>Select your ingredients</h4>
             <div id='selected-list'>
               {this.state.selected.map((selected, i) => (
-                <div class=''>
+                <div className='' key={i}>
                   {selected}
                   <span
-                    class='floating-button'
+                    className='floating-button'
                     onClick={() => this.removefromSelected(i)}
                   >
                     &times;
@@ -145,10 +143,10 @@ class Contentbased extends Component {
               {/* </div> */}
               <div id='ingredients-list'>
                 {this.remainingIngredient().map(ingredient => (
-                  <div class='not-selected ingredient'>
+                  <div className='not-selected ingredient' key={ingredient}>
                     {ingredient}
                     <span
-                      class='floating-button'
+                      className='floating-button'
                       onClick={() => this.moveToSelected(ingredient)}
                     >
                       +
@@ -167,9 +165,9 @@ class Contentbased extends Component {
               {this.state.recipes.length === 0 && (
                 <p className='noDataStyle'>{this.state.recipesData}</p>
               )}
-              {this.state.recipes.length != 0 && (this.state.showDetailedRecipe === false) &&
+              {this.state.recipes.length !== 0 && (this.state.showDetailedRecipe === false) &&
                 this.state.recipes.map(recipe => (
-                  <Row className='recipe' onClick={() => this.showRecipe(recipe)}>
+                  <Row className='recipe' key={recipe.id} onClick={() => this.showRecipe(recipe)}>
                     <Row>
                       <h4>{recipe.recipe}</h4>
                     </Row>
@@ -193,22 +191,16 @@ class Contentbased extends Component {
                     Steps
                 </Row>
                   {steps.map((step, count) => {
-                    return (<Row className='recipeStep'>
+                    return (<Row className='recipeStep' key={count}>
                       {`${count + 1}}`}  {step}
                     </Row>)
                   })}
                   <Row className='detailViewCloseBtn'>
                     <Button onClick={() => this.closeDetails()}>Close</Button>
                   </Row>
-
-
                 </div>
-
               )}
             </Row>
-
-
-            {/* </Row> */}
           </Col>
         </Row>
       </Container>
