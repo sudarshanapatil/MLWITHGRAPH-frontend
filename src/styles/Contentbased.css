@@ -99,6 +99,8 @@
   padding: 5px;
   margin-left: 5px;
   font-size: 20px;
+  align-items: center;
+  justify-content: center;
   /* color:pink; */
   /* margin-top:10px */
 }
@@ -111,7 +113,7 @@
   padding: 20px;
   background-color: beige;
   width: 98%;
-  height:150px
+  /* height:20% */
 
 }
 
@@ -126,6 +128,11 @@
   height:800px
 }
 
+.selected-ingred{
+  background-color: #CD5C5C;
+  color:white;
+  padding:5px
+}
 
 #selected-list > .selected {
   background-color:#CD5C5C;
@@ -165,4 +172,12 @@
 .recipeList{
   overflow-y: scroll;
   height: 780px;
+  margin:10px
+}
+
+.recipeTitle{
+  padding:10px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
 }

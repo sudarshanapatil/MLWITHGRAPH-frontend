@@ -121,7 +121,7 @@ class Home extends Component {
           <Col>
             <InputGroup className="findRecipe">
               <FormControl
-                placeholder="Recipe name..."
+                placeholder="I WANT TO MAKE ..."
                 aria-label="Recipient's username"
                 aria-describedby="basic-addon2"
                 onChange={this.handleChange}
@@ -156,13 +156,13 @@ class Home extends Component {
         {!this.state.showCarousel && !this.state.showDetailedRecipe &&
           <Row className='searchedData'>
             <Row className='searchTitle'>
-              {`${this.state.searchText} Recipes ${this.state.searchCount}`}
+              {`"${this.state.searchText}" Recipes - ${this.state.searchCount}`}
             </Row>
 
             {this.state.searchedData.map((recipe, key) => {
               return (
                 <Row className='searchedRecipe' key={key + recipe} onClick={() => this.showRecipe(recipe)}>
-                  {recipe.recipeName}
+                  {recipe.recipeName.replace(/&amp;/g,'')}
                 </Row>
               )
             })}
@@ -172,7 +172,7 @@ class Home extends Component {
           this.state.showDetailedRecipe && (
             <div className='detailedView'>
               <Row className='detailedRecipeTitle'>
-                {this.state.detailRecipe.recipeName}
+                {`"${this.state.detailRecipe.recipeName.replace(/&amp;/g,'')}"`}
               </Row>
               <Row>
                 <Image src={require('../images/recipe1.jpg')}></Image>

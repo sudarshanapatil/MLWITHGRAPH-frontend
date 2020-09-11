@@ -8,7 +8,7 @@ function Navbar(props) {
   return (
     <Row className='titlebar'>
       <Col className='siteName'>
-        Recipe House
+        GENIUS Kitchen
           </Col>
       <Col>
         <Link to='/home'>Home</Link>

@@ -130,7 +130,7 @@ class Contentbased extends Component {
             <h4 id='ingredient-heading'>Select your ingredients</h4>
             <div id='selected-list'>
               {this.state.selected.map((selected, i) => (
-                <div className='' key={i}>
+                <div className='selected-ingred' key={i}>
                   {selected}
                   <span
                     className='floating-button'
@@ -168,11 +168,11 @@ class Contentbased extends Component {
               {this.state.recipes.length !== 0 && (this.state.showDetailedRecipe === false) &&
                 this.state.recipes.map(recipe => (
                   <Row className='recipe' key={recipe.id} onClick={() => this.showRecipe(recipe)}>
-                    <Row>
-                      <h4>{recipe.recipe}</h4>
+                    <Row className='recipeTitle'>
+                      <h4>{recipe.recipe.replace(/&amp;/g,'')}</h4>
                     </Row>
                     <Row className='recipe-detail'>
-                      Ingredients: {recipe.ingredients.join(', ')}
+                      Ingredients : {recipe.ingredients.join(', ')}
                     </Row>
                   </Row>
                 ))}

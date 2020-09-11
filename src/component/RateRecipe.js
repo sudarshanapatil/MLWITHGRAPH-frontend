@@ -59,11 +59,9 @@ class RateRecipe extends Component {
     })
       .then(res => res.json())
       .then(recipes => {
-        console.log(this.state)
         this.handleClose()
       })
       .catch(err => {
-        console.log(err)
         this.setState({
           recipes: []
         })
@@ -89,7 +87,6 @@ class RateRecipe extends Component {
         this.setState({ recipes, apiData: recipes })
       })
       .catch(err => {
-        console.log(err)
         this.setState({
           recipes: []
         })
@@ -123,7 +120,7 @@ class RateRecipe extends Component {
           } */}
           {this.state.recipes.map(recipe => (
             <div className='recipeRate' key={recipe.id} onClick={() => this.showModal(recipe.id)}>
-              {recipe.recipeName}
+              {recipe.recipeName.replace(/&amp;/g,'')}
             </div>
 
           ))}
@@ -146,14 +143,12 @@ class RateRecipe extends Component {
                 </Button>
               })}
             </Modal.Body>
-
           </Modal>
         </Row>
       </Container >
     )
   }
 }
-// export default RateRecipe
 
 const withContext = () => (
   <UserContext.Consumer>
